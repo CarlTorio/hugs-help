@@ -31,7 +31,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section className="relative h-screen w-full overflow-hidden flex flex-col items-center">
       {/* Video background */}
       <video
         autoPlay
@@ -49,17 +49,18 @@ const HeroSection = () => {
         }} />
 
 
+      {/* Logo - positioned just below navbar */}
+      <motion.img
+        src="https://i.imgur.com/yM9hN27.png"
+        alt="Auxiliary Logo"
+        className="relative z-10 w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain mt-24 md:mt-28"
+        style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1, duration: 0.7 }} />
+
       {/* Content */}
-      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-end pb-12 md:pb-16 h-full">
-        {/* Logo */}
-        <motion.img
-          src="https://i.imgur.com/yM9hN27.png"
-          alt="Auxiliary Logo"
-          className="w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain -mt-28 md:-mt-40"
-          style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.7 }} />
+      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-end pb-12 md:pb-16 flex-1">
 
         {/* Novaliches */}
         <motion.p
