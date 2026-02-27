@@ -83,7 +83,7 @@ const HeroSection = () => {
 
 
         {/* Breathing space */}
-        <div className="h-[160px] md:h-[200px]" />
+        <div className="h-[220px] md:h-[280px]" />
 
         {/* Title */}
         
