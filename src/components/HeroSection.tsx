@@ -50,7 +50,7 @@ const HeroSection = () => {
 
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-center h-full">
+      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-end pb-12 md:pb-16 h-full">
         {/* Logo */}
         <motion.img
           src="https://i.imgur.com/yM9hN27.png"
