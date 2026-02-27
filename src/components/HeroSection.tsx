@@ -31,7 +31,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section className="relative h-screen w-full overflow-visible flex items-center justify-center" style={{ zIndex: 10 }}>
       {/* Video background */}
       <video
         autoPlay
@@ -185,11 +185,14 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      
-
-
-
+      {/* Overlapping bottom image */}
+      <div className="absolute bottom-0 left-0 right-0 translate-y-[30%] z-20 flex justify-center pointer-events-none">
+        <img
+          src="https://i.imgur.com/s742yX4.png"
+          alt="Auxiliary overlay"
+          className="w-full max-w-[900px] object-contain px-4"
+        />
+      </div>
 
 
 
