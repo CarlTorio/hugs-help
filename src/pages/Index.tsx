@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import ExploreSection from "@/components/ExploreSection";
 import AboutSection from "@/components/AboutSection";
 import GallerySection from "@/components/GallerySection";
 import ParallaxQuote from "@/components/ParallaxQuote";
@@ -22,7 +21,6 @@ const Index = () => {
       <div style={{ opacity: loaded ? 1 : 0, transition: "opacity 0.5s ease" }}>
         <Navbar />
         <HeroSection loaded={loaded} />
-        <ExploreSection />
         <AboutSection />
         <GallerySection />
         <ParallaxQuote />
