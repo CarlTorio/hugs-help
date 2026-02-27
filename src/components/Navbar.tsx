@@ -40,7 +40,7 @@ const Navbar = () => {
           borderBottom: scrolled ? "1px solid rgba(139,0,0,0.3)" : "1px solid transparent",
         }}
       >
-        <div className="flex items-center justify-center py-5 px-4">
+        <div className="flex items-center justify-center py-7 px-4">
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-10">
             {NAV_LINKS.map((link) => (

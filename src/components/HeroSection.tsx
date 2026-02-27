@@ -64,7 +64,7 @@ const HeroSection = () => {
 
         {/* Novaliches */}
         <motion.p
-          className="mt-1 font-body font-normal text-[11px] tracking-[5px] uppercase"
+          className="mt-8 font-body font-normal text-[11px] tracking-[5px] uppercase"
           style={{ color: "rgba(255,255,255,1)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -83,7 +83,7 @@ const HeroSection = () => {
 
 
         {/* Breathing space */}
-        <div className="h-[160px] md:h-[200px]" />
+        <div className="h-[80px] md:h-[100px]" />
 
         {/* Title */}
         
