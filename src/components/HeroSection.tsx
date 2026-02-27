@@ -66,9 +66,9 @@ const HeroSection = () => {
         <motion.p
           className="mt-10 md:mt-14 font-body font-bold text-[20px] md:text-[24px] tracking-[1px] uppercase"
           style={{ color: "rgba(255,255,255,1)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}>
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
           NOVALICHES
         </motion.p>
 
@@ -76,9 +76,9 @@ const HeroSection = () => {
         <motion.div
           className="mt-[10px] mx-auto"
           style={{ height: 2, background: "#CC0000" }}
-          initial={{ width: 0 }}
-          animate={{ width: 20 }}
-          transition={{ delay: 0.4, duration: 0.4 }} />
+          initial={{ opacity: 0, y: 30, width: 0 }}
+          animate={{ opacity: 1, y: 0, width: 20 }}
+          transition={{ delay: 0.5, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }} />
 
         {/* Breathing space */}
         <div className="h-[24px] md:h-[30px]" />
@@ -102,9 +102,9 @@ const HeroSection = () => {
         <motion.p
           className="mt-6 md:mt-8 font-body font-normal text-[17px] max-[768px]:text-[15px] leading-[1.5] max-w-[480px] max-[768px]:max-w-[90%]"
           style={{ color: "#FFFFFF" }}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}>
+          transition={{ delay: 0.7, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
 
           Experience the next level of nightlife at Auxiliary, Novaliches' premier bar and lounge. Known for its premium cocktails, electrifying DJ sets, and an atmosphere unlike any other Auxiliary is a must-visit destination.
         </motion.p>
@@ -112,9 +112,9 @@ const HeroSection = () => {
         {/* Buttons */}
         <motion.div
           className="mt-8 md:mt-10 flex flex-col items-center gap-2.5 w-full"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0 }}>
+          transition={{ delay: 0.9, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
 
           <button
             onClick={scrollToBooking}
@@ -159,9 +159,9 @@ const HeroSection = () => {
         {/* Social icons */}
         <motion.div
           className="mt-8 md:mt-10 flex items-center gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}>
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
 
           <SocialIcon
             href="https://www.facebook.com/profile.php?id=61581380972061"
