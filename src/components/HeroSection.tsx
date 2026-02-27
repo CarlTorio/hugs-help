@@ -85,20 +85,6 @@ const HeroSection = () => {
         {/* Breathing space */}
         <div className="h-[100px] md:h-[140px]" />
 
-        {/* Title */}
-        <motion.h1
-          className="font-display tracking-[4px]"
-          style={{
-            fontSize: "clamp(32px, 6vw, 64px)",
-            color: "#FFFFFF",
-            textShadow: "0 0 40px rgba(139,0,0,0.5)",
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.7 }}
-        >
-          AUXILIARY BAR & LOUNGE
-        </motion.h1>
 
         {/* Description */}
         <motion.p
