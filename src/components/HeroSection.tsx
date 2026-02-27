@@ -53,7 +53,7 @@ const HeroSection = () => {
       <div className="relative z-10 flex flex-col items-center text-center px-4 w-full max-w-2xl">
         {/* Logo */}
         <motion.img
-          src="https://i.imgur.com/amKfns1.png"
+          src="https://i.imgur.com/yM9hN27.png"
           alt="Auxiliary Logo"
           className="w-[160px] h-[160px] md:w-[160px] md:h-[160px] max-[768px]:w-[130px] max-[768px]:h-[130px]"
           style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
@@ -85,10 +85,25 @@ const HeroSection = () => {
         {/* Breathing space */}
         <div className="h-[100px] md:h-[140px]" />
 
+        {/* Title */}
+        <motion.h1
+          className="font-display tracking-[4px]"
+          style={{
+            fontSize: "clamp(32px, 6vw, 64px)",
+            color: "#FFFFFF",
+            textShadow: "0 0 40px rgba(139,0,0,0.5)",
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7 }}
+        >
+          AUXILIARY BAR & LOUNGE
+        </motion.h1>
+
         {/* Description */}
         <motion.p
-          className="mt-5 font-body font-bold leading-[1.7] max-w-[520px] max-[768px]:max-w-[90%]"
-          style={{ fontSize: "clamp(20px, 4vw, 32px)", color: "rgba(240,235,227,0.9)" }}
+          className="mt-5 font-body font-light text-[13px] max-[768px]:text-[12px] leading-[1.9] max-w-[440px] max-[768px]:max-w-[90%]"
+          style={{ color: "rgba(240,235,227,0.8)" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
@@ -170,6 +185,16 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center animate-scroll-bounce">
+        <span
+          className="font-body font-semibold text-[8px] tracking-[3px]"
+          style={{ color: "rgba(255,255,255,0.5)" }}
+        >
+          SCROLL
+        </span>
+        <div className="mt-2 w-[1px] h-9" style={{ background: "#CC0000" }} />
+      </div>
     </section>
   );
 };
