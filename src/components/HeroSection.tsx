@@ -68,7 +68,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}>
-          NOVALICHES PHILIPPINES
+          NOVALICHES
         </motion.p>
 
         {/* Red accent line */}
@@ -110,7 +110,7 @@ const HeroSection = () => {
 
         {/* Buttons */}
         <motion.div
-          className="mt-24 flex flex-col items-center gap-2.5 w-full"
+          className="mt-10 flex flex-col items-center gap-2.5 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}>
