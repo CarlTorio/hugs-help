@@ -116,24 +116,35 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
           animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ delay: 0.9, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
 
-          <button
+          <motion.button
             onClick={scrollToBooking}
-            className="font-body font-bold text-[10px] tracking-[2px] uppercase rounded-full px-10 py-2.5 transition-all duration-200 max-[768px]:w-[70%] max-[768px]:max-w-[220px]"
+            className="font-body font-bold text-[10px] tracking-[2px] uppercase rounded-full px-10 py-2.5 transition-colors duration-200 max-[768px]:w-[70%] max-[768px]:max-w-[220px]"
             style={{
               background: "#8B0000",
               color: "#FFFFFF",
               border: "none"
             }}
+            animate={{
+              scale: [1, 1.05, 1],
+              boxShadow: [
+                "0 0 0px rgba(204,0,0,0)",
+                "0 0 20px rgba(204,0,0,0.6)",
+                "0 0 0px rgba(204,0,0,0)"
+              ]
+            }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "#A80000";
-              e.currentTarget.style.boxShadow = "0 0 20px rgba(139,0,0,0.6)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "#8B0000";
-              e.currentTarget.style.boxShadow = "none";
             }}>
             BOOK NOW
-          </button>
+          </motion.button>
           <button
             onClick={scrollToBooking}
             className="font-body font-bold text-[10px] tracking-[2px] uppercase rounded-full px-10 py-2.5 transition-all duration-200 max-[768px]:w-[70%] max-[768px]:max-w-[220px]"
