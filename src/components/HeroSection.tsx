@@ -55,7 +55,7 @@ const HeroSection = () => {
         <motion.img
           src="https://i.imgur.com/yM9hN27.png"
           alt="Auxiliary Logo"
-          className="w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain mt-[-40px]"
+          className="w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain mt-[-100px]"
           style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -65,7 +65,7 @@ const HeroSection = () => {
         {/* Novaliches */}
         <motion.p
           className="mt-1 font-body font-normal text-[11px] tracking-[5px] uppercase"
-          style={{ color: "rgba(255,255,255,0.75)" }}
+          style={{ color: "rgba(255,255,255,1)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}>
@@ -103,7 +103,7 @@ const HeroSection = () => {
         {/* Description */}
         <motion.p
           className="mt-5 font-body font-semibold text-[15px] max-[768px]:text-[14px] leading-[1.9] max-w-[480px] max-[768px]:max-w-[90%]"
-          style={{ color: "rgba(240,235,227,0.8)" }}
+          style={{ color: "#FFFFFF" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}>
