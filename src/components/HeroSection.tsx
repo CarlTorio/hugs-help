@@ -50,21 +50,20 @@ const HeroSection = () => {
 
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-end">
+      <div className="relative z-10 text-center px-4 w-full max-w-2xl flex-col flex items-center justify-center h-full">
         {/* Logo */}
         <motion.img
           src="https://i.imgur.com/yM9hN27.png"
           alt="Auxiliary Logo"
-          className="w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain mt-[-100px]"
+          className="w-[300px] md:w-[320px] max-[768px]:w-[230px] object-contain"
           style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.7 }} />
 
-
         {/* Novaliches */}
         <motion.p
-          className="mt-12 font-body font-bold text-[16px] md:text-[18px] tracking-[6px] uppercase"
+          className="mt-6 font-body font-bold text-[20px] md:text-[24px] tracking-[8px] uppercase"
           style={{ color: "rgba(255,255,255,1)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -80,9 +79,8 @@ const HeroSection = () => {
           animate={{ width: 20 }}
           transition={{ delay: 0.4, duration: 0.4 }} />
 
-
         {/* Breathing space */}
-        <div className="h-[80px] md:h-[100px]" />
+        <div className="h-[40px] md:h-[50px]" />
 
         {/* Title */}
         
@@ -112,7 +110,7 @@ const HeroSection = () => {
 
         {/* Buttons */}
         <motion.div
-          className="mt-6 flex flex-col items-center gap-2.5 w-full"
+          className="mt-10 flex flex-col items-center gap-2.5 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}>
@@ -159,7 +157,7 @@ const HeroSection = () => {
 
         {/* Social icons */}
         <motion.div
-          className="mt-5 flex items-center gap-3"
+          className="mt-8 flex items-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}>
