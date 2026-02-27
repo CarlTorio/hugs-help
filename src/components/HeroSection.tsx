@@ -100,7 +100,7 @@ const HeroSection = () => {
 
         {/* Description */}
         <motion.p
-          className="mt-6 md:mt-8 font-body font-normal text-[17px] max-[768px]:text-[15px] leading-[1.9] max-w-[480px] max-[768px]:max-w-[90%]"
+          className="mt-6 md:mt-8 font-body font-normal text-[17px] max-[768px]:text-[15px] leading-[1.5] max-w-[480px] max-[768px]:max-w-[90%]"
           style={{ color: "#FFFFFF" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
