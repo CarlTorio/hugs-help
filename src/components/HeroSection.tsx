@@ -63,7 +63,7 @@ const HeroSection = () => {
 
         {/* Novaliches */}
         <motion.p
-          className="mt-6 font-body font-bold text-[20px] md:text-[24px] tracking-[8px] uppercase"
+          className="mt-10 md:mt-14 font-body font-bold text-[20px] md:text-[24px] tracking-[8px] uppercase"
           style={{ color: "rgba(255,255,255,1)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -80,7 +80,7 @@ const HeroSection = () => {
           transition={{ delay: 0.4, duration: 0.4 }} />
 
         {/* Breathing space */}
-        <div className="h-[40px] md:h-[50px]" />
+        <div className="h-[24px] md:h-[30px]" />
 
         {/* Title */}
         
@@ -99,7 +99,7 @@ const HeroSection = () => {
 
         {/* Description */}
         <motion.p
-          className="mt-5 font-body font-semibold text-[15px] max-[768px]:text-[14px] leading-[1.9] max-w-[480px] max-[768px]:max-w-[90%]"
+          className="mt-6 md:mt-8 font-body font-semibold text-[15px] max-[768px]:text-[14px] leading-[1.9] max-w-[480px] max-[768px]:max-w-[90%]"
           style={{ color: "#FFFFFF" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ const HeroSection = () => {
 
         {/* Buttons */}
         <motion.div
-          className="mt-10 flex flex-col items-center gap-2.5 w-full"
+          className="mt-8 md:mt-10 flex flex-col items-center gap-2.5 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}>
@@ -157,7 +157,7 @@ const HeroSection = () => {
 
         {/* Social icons */}
         <motion.div
-          className="mt-8 flex items-center gap-3"
+          className="mt-8 md:mt-10 flex items-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}>
