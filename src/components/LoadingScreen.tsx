@@ -47,7 +47,6 @@ const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           className="animate-logo-pulse"
           style={{
             width: 100,
-            height: 100,
             filter: "drop-shadow(0 0 20px rgba(139,0,0,0.8))",
           }}
         />

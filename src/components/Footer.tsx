@@ -17,7 +17,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-0 justify-between">
         {/* Left */}
         <div className="text-center md:text-left">
-          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-16 h-16 mx-auto md:mx-0" />
+          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-16 object-contain mx-auto md:mx-0" />
           <p className="font-body font-light text-[11px] mt-3 max-w-[240px]" style={{ color: "rgba(240,235,227,0.5)" }}>
             Novaliches' finest bar and lounge. Premium spirits, unforgettable nights.
           </p>
@@ -25,7 +25,7 @@ const Footer = () => {
 
         {/* Center */}
         <div className="flex flex-col items-center">
-          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-20 h-20" />
+          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-20 object-contain" />
           <div className="w-10 h-[1px] mt-4 mb-4" style={{ background: "#8B0000" }} />
           <div className="flex gap-3">
             {socialLinks.map((s) => (
