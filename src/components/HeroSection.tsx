@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import auxiliaryLogo from "@/assets/auxiliary-logo.png";
 
 const SocialIcon = ({ href, label, path }: { href: string; label: string; path: string }) => (
   <a
@@ -54,9 +53,9 @@ const HeroSection = () => {
       <div className="relative z-10 flex flex-col items-center text-center px-4 w-full max-w-2xl">
         {/* Logo */}
         <motion.img
-          src={auxiliaryLogo}
+          src="https://i.imgur.com/yM9hN27.png"
           alt="Auxiliary Logo"
-          className="max-w-full h-auto"
+          className="w-[160px] h-[160px] md:w-[160px] md:h-[160px] max-[768px]:w-[130px] max-[768px]:h-[130px]"
           style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -86,6 +85,20 @@ const HeroSection = () => {
         {/* Breathing space */}
         <div className="h-[100px] md:h-[140px]" />
 
+        {/* Title */}
+        <motion.h1
+          className="font-display tracking-[4px]"
+          style={{
+            fontSize: "clamp(32px, 6vw, 64px)",
+            color: "#FFFFFF",
+            textShadow: "0 0 40px rgba(139,0,0,0.5)",
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7 }}
+        >
+          AUXILIARY BAR & LOUNGE
+        </motion.h1>
 
         {/* Description */}
         <motion.p
