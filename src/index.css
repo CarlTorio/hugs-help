@@ -2,50 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
 @layer base {
   :root {
-    --background: 0 100% 3%;
-    --foreground: 30 33% 93%;
-    --card: 0 100% 4%;
-    --card-foreground: 30 33% 93%;
-    --popover: 0 100% 4%;
-    --popover-foreground: 30 33% 93%;
-    --primary: 0 100% 27%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 100% 5%;
-    --secondary-foreground: 30 33% 93%;
-    --muted: 0 100% 5%;
-    --muted-foreground: 30 20% 70%;
-    --accent: 0 100% 33%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 100% 27% / 0.25;
-    --input: 0 100% 27% / 0.3;
-    --ring: 0 100% 27%;
-    --radius: 0rem;
-    --sidebar-background: 0 100% 3%;
-    --sidebar-foreground: 30 33% 93%;
-    --sidebar-primary: 0 100% 27%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 100% 5%;
-    --sidebar-accent-foreground: 30 33% 93%;
-    --sidebar-border: 0 100% 27% / 0.2;
-    --sidebar-ring: 0 100% 27%;
+    --background: 0 0% 100%;
+    --foreground: 33 25% 20%;
 
-    /* Custom brand tokens */
-    --aux-bg-deep: #0D0000;
-    --aux-bg-surface: #130000;
-    --aux-bg-surface-mid: #1C0000;
-    --aux-maroon: #8B0000;
-    --aux-maroon-bright: #A80000;
-    --aux-maroon-glow: rgba(139,0,0,0.4);
-    --aux-red-thin: #CC0000;
-    --aux-cream: #F0EBE3;
-    --aux-cream-muted: rgba(240,235,227,0.6);
-    --aux-cream-body: rgba(240,235,227,0.75);
-    --aux-border-subtle: rgba(139,0,0,0.25);
-    --aux-footer-bg: #0A0000;
+    --card: 0 0% 100%;
+    --card-foreground: 33 25% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 33 25% 20%;
+
+    --primary: 45 90% 65%;
+    --primary-foreground: 33 25% 20%;
+
+    --secondary: 40 30% 90%;
+    --secondary-foreground: 33 25% 20%;
+
+    --muted: 40 20% 95%;
+    --muted-foreground: 33 15% 50%;
+
+    --accent: 45 90% 65%;
+    --accent-foreground: 33 25% 20%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 45 90% 65%;
+
+    --radius: 0.75rem;
+    
+    /* Luxury salon color palette */
+    --gold: 45 90% 65%;
+    --gold-dark: 45 85% 55%;
+    --cream: 40 30% 90%;
+    --cream-dark: 40 25% 85%;
+    --beige: 35 20% 80%;
+    --warm-white: 40 10% 98%;
+    
+    /* Barbershop color palette */
+    --barbershop-gold: 45 90% 65%;
+    --barbershop-bronze: 35 65% 50%;
+    --barbershop-charcoal: 0 0% 15%;
+    --barbershop-black: 0 0% 8%;
+    
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(45 90% 65%) 0%, hsl(45 85% 55%) 100%);
+    --gradient-cream: linear-gradient(180deg, hsl(40 30% 90%) 0%, hsl(40 25% 85%) 100%);
+    --gradient-wave: linear-gradient(90deg, hsl(45 90% 65% / 0.2) 0%, hsl(45 90% 65% / 0.05) 100%);
+    --gradient-white-gold: radial-gradient(ellipse at center top, hsl(0 0% 100%) 0%, hsl(40 50% 95%) 50%, hsl(45 40% 88%) 100%);
+    
+    /* Shadows */
+    --shadow-soft: 0 2px 10px hsl(45 90% 65% / 0.1);
+    --shadow-medium: 0 4px 20px hsl(45 90% 65% / 0.15);
+    --shadow-large: 0 8px 30px hsl(45 90% 65% / 0.2);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 33 25% 12%;
+    --foreground: 40 10% 98%;
+
+    --card: 33 25% 15%;
+    --card-foreground: 40 10% 98%;
+
+    --popover: 33 25% 15%;
+    --popover-foreground: 40 10% 98%;
+
+    --primary: 45 90% 65%;
+    --primary-foreground: 33 25% 12%;
+
+    --secondary: 33 20% 20%;
+    --secondary-foreground: 40 10% 98%;
+
+    --muted: 33 20% 20%;
+    --muted-foreground: 40 15% 65%;
+
+    --accent: 45 90% 65%;
+    --accent-foreground: 33 25% 12%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 10% 98%;
+
+    --border: 33 20% 20%;
+    --input: 33 20% 20%;
+    --ring: 45 90% 65%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -53,69 +121,48 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
-  }
-  h1, h2, h3, h4, h5, h6, .font-display {
-    font-family: 'Bebas Neue', sans-serif;
   }
 }
 
-/* Noise grain overlay */
-.noise-overlay::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+/* Custom animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Laser ambient lines */
-.laser-lines {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-}
-.laser-lines .line {
-  position: absolute;
-  width: 200%;
-  height: 1px;
-  background: rgba(139,0,0,0.15);
-  transform-origin: center;
-}
-.laser-lines .line:nth-child(1) { top: 15%; left: -50%; transform: rotate(25deg); animation: laser-drift 20s ease-in-out infinite; }
-.laser-lines .line:nth-child(2) { top: 35%; left: -50%; transform: rotate(-18deg); animation: laser-drift 25s ease-in-out infinite reverse; }
-.laser-lines .line:nth-child(3) { top: 55%; left: -50%; transform: rotate(32deg); animation: laser-drift 22s ease-in-out infinite; }
-.laser-lines .line:nth-child(4) { top: 75%; left: -50%; transform: rotate(-22deg); animation: laser-drift 28s ease-in-out infinite reverse; }
-.laser-lines .line:nth-child(5) { top: 90%; left: -50%; transform: rotate(15deg); animation: laser-drift 24s ease-in-out infinite; }
-
-@keyframes laser-drift {
-  0%, 100% { transform: rotate(var(--tw-rotate, 25deg)) translateY(0); opacity: 0.15; }
-  50% { transform: rotate(var(--tw-rotate, 25deg)) translateY(30px); opacity: 0.08; }
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0D0000;
-}
-::-webkit-scrollbar-thumb {
-  background: #8B0000;
-  border-radius: 3px;
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
 }
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+}
+
+.hover-lift {
+  transition: var(--transition-smooth);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
 }
