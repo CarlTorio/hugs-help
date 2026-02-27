@@ -42,7 +42,7 @@ const LocationSection = () => (
         <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>
           FIND US
         </p>
-        <h2 className="font-display text-[56px] max-[768px]:text-[38px] mt-2" style={{ color: "#FFFFFF" }}>
+        <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>
           Where To Find Us
         </h2>
       </div>

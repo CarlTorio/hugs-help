@@ -137,7 +137,7 @@ const MenuSection = () => {
           <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>
             WHAT WE SERVE
           </p>
-          <h2 className="font-display text-[56px] max-[768px]:text-[38px] mt-2" style={{ color: "#FFFFFF" }}>
+          <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>
             Our Menu
           </h2>
           <p className="font-body font-light text-[13px] mt-2" style={{ color: "rgba(240,235,227,0.6)" }}>

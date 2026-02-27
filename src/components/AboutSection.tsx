@@ -51,7 +51,7 @@ const AboutSection = () => (
           variants={{ hidden: { scaleX: 0, originX: 0 }, visible: { scaleX: 1, transition: { duration: 0.6 } } }}
         />
         <motion.h2
-          className="font-display text-[52px] max-[768px]:text-[38px] tracking-[2px]"
+          className="font-display text-[40px] max-[768px]:text-[30px] tracking-[2px]"
           style={{ color: "#FFFFFF" }}
           variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
         >

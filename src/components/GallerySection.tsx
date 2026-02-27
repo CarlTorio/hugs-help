@@ -19,7 +19,7 @@ const GallerySection = () => (
         <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>
           LIFE AT AUXILIARY
         </p>
-        <h2 className="font-display text-[56px] max-[768px]:text-[38px] mt-2" style={{ color: "#FFFFFF" }}>
+        <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>
           A Night To Remember
         </h2>
         <div className="mx-auto mt-3" style={{ width: 60, height: 1, background: "#8B0000" }} />
