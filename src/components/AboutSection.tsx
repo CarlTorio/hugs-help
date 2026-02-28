@@ -16,58 +16,49 @@ const childFade = {
 const AboutSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [hasPlayedWithSound, setHasPlayedWithSound] = useState(false);
   const hasPlayedRef = useRef(false);
   const isInViewRef = useRef(false);
   const userInteractedRef = useRef(false);
   const [isEnded, setIsEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
-  const tryPlayWithSound = () => {
-    if (hasPlayedRef.current || !videoRef.current || !isInViewRef.current || !userInteractedRef.current) return;
-    hasPlayedRef.current = true;
-    const video = videoRef.current;
-    video.loop = false;
-    video.currentTime = 0;
-    video.muted = false;
-    video.play().then(() => {
-      setIsMuted(false);
-      setHasPlayedWithSound(true);
-    }).catch(() => {
-      // Still blocked, keep muted
-      video.muted = true;
-      video.play();
-      setHasPlayedWithSound(true);
-    });
-  };
-
-  // Track user interaction (click, touch, scroll, keydown)
   useEffect(() => {
+    const tryPlay = () => {
+      if (hasPlayedRef.current || !videoRef.current || !isInViewRef.current || !userInteractedRef.current) return;
+      hasPlayedRef.current = true;
+      const video = videoRef.current;
+      video.loop = false;
+      video.currentTime = 0;
+      video.muted = false;
+      video.play().then(() => {
+        setIsMuted(false);
+      }).catch(() => {
+        video.muted = true;
+        video.play();
+      });
+    };
+
     const markInteracted = () => {
       userInteractedRef.current = true;
-      tryPlayWithSound();
+      tryPlay();
     };
-    const events = ["click", "touchstart", "scroll", "keydown"];
-    events.forEach(e => window.addEventListener(e, markInteracted, { once: false, passive: true }));
-    return () => {
-      events.forEach(e => window.removeEventListener(e, markInteracted));
-    };
-  }, []);
 
-  // Observe when section comes into view
-  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          tryPlayWithSound();
-        }
+        if (entry.isIntersecting) tryPlay();
       },
       { threshold: 0.3 }
     );
 
+    const events = ["click", "touchstart", "scroll", "keydown"] as const;
+    events.forEach(e => window.addEventListener(e, markInteracted, { passive: true }));
     if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+
+    return () => {
+      events.forEach(e => window.removeEventListener(e, markInteracted));
+      observer.disconnect();
+    };
   }, []);
 
   const handleEnded = () => {
