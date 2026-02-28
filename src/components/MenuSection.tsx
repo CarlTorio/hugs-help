@@ -130,7 +130,7 @@ const MenuSection = () => {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="menu" className="py-[90px] px-4" style={{ background: "#130000" }}>
+    <section id="menu" className="py-[50px] px-4" style={{ background: "#130000" }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">

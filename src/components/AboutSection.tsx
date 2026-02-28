@@ -88,7 +88,7 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="relative py-[90px]" style={{ background: "#130000" }}>
+    <section id="about" className="relative py-[50px]" style={{ background: "#130000" }}>
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-0">
         {/* Left - Content */}
         <motion.div

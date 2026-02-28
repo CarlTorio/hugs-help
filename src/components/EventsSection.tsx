@@ -22,7 +22,7 @@ const events = [
 ];
 
 const EventsSection = () => (
-  <section id="events" className="py-[90px] px-4" style={{ background: "#0D0000" }}>
+  <section id="events" className="py-[50px] px-4" style={{ background: "#0D0000" }}>
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-14">
