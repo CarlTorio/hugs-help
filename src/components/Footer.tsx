@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer style={{ background: "#0A0000", borderTop: "1px solid rgba(139,0,0,0.2)" }} className="px-[5%] pt-[50px] pb-7">
       <div className="max-w-6xl mx-auto flex flex-col items-center">
-        <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-28 object-contain" />
+        <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-40 object-contain" />
         <p className="font-body font-light text-[11px] mt-4 max-w-[280px] text-center" style={{ color: "rgba(240,235,227,0.5)" }}>
           Novaliches' finest bar and lounge. Premium spirits, unforgettable nights.
         </p>
