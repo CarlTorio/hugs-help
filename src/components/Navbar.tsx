@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 w-full z-[1000] transition-all duration-300"
+        className="top-0 left-0 w-full z-[1000] transition-all duration-300"
         style={{
           background: scrolled ? "rgba(10,0,0,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
