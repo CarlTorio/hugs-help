@@ -59,14 +59,14 @@ const LocationSection = () => {
 
         <div className="flex flex-col md:flex-row gap-10">
           <motion.div
-            className="w-full md:w-1/2 space-y-7"
+            className="w-full md:w-1/2 space-y-4 md:space-y-7"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
             {info.map((item) => (
-              <div key={item.label} className="flex items-start gap-4">
+              <div key={item.label} className="flex items-start gap-3 md:gap-4">
                 <div
                   className="w-10 h-10 shrink-0 flex items-center justify-center rounded"
                   style={{ border: "1px solid rgba(139,0,0,0.2)" }}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 type MenuItem = { name: string; sub?: string; price: string };
 type MenuCategory = { label: string; items: MenuItem[] };
@@ -126,8 +127,14 @@ const MENU: MenuCategory[] = [
   },
 ];
 
+const VISIBLE_TABS_MOBILE = 4;
+
 const MenuSection = () => {
   const [active, setActive] = useState(0);
+  const [showAllTabs, setShowAllTabs] = useState(false);
+
+  const visibleTabs = MENU.slice(0, VISIBLE_TABS_MOBILE);
+  const hiddenTabs = MENU.slice(VISIBLE_TABS_MOBILE);
 
   return (
     <section id="menu" className="py-[50px] px-4" style={{ background: "#130000" }}>
@@ -145,8 +152,8 @@ const MenuSection = () => {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-3 mb-8 scrollbar-hide justify-start md:justify-center">
+        {/* Desktop Tabs - unchanged */}
+        <div className="hidden md:flex gap-2 pb-3 mb-8 justify-center">
           {MENU.map((cat, i) => (
             <button
               key={cat.label}
@@ -163,6 +170,73 @@ const MenuSection = () => {
           ))}
         </div>
 
+        {/* Mobile Tabs - wrapped with collapsible */}
+        <div className="md:hidden mb-6">
+          <div className="flex flex-wrap gap-1.5 justify-center">
+            {visibleTabs.map((cat, i) => (
+              <button
+                key={cat.label}
+                onClick={() => { setActive(i); setShowAllTabs(false); }}
+                className="font-body font-bold text-[8px] tracking-[2px] uppercase px-2.5 py-1.5 transition-all duration-200"
+                style={{
+                  color: active === i ? "#CC0000" : "rgba(240,235,227,0.5)",
+                  borderBottom: active === i ? "2px solid #8B0000" : "2px solid transparent",
+                  background: "none",
+                }}
+              >
+                {cat.label}
+              </button>
+            ))}
+            <button
+              onClick={() => setShowAllTabs(!showAllTabs)}
+              className="font-body font-bold text-[8px] tracking-[2px] uppercase px-2.5 py-1.5 flex items-center gap-1 transition-all duration-200"
+              style={{
+                color: active >= VISIBLE_TABS_MOBILE ? "#CC0000" : "rgba(240,235,227,0.5)",
+                borderBottom: active >= VISIBLE_TABS_MOBILE ? "2px solid #8B0000" : "2px solid transparent",
+                background: "none",
+              }}
+            >
+              MORE
+              <ChevronDown
+                size={12}
+                className="transition-transform duration-200"
+                style={{ transform: showAllTabs ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
+            </button>
+          </div>
+          <AnimatePresence>
+            {showAllTabs && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-wrap gap-1.5 justify-center pt-2">
+                  {hiddenTabs.map((cat, i) => {
+                    const realIndex = i + VISIBLE_TABS_MOBILE;
+                    return (
+                      <button
+                        key={cat.label}
+                        onClick={() => { setActive(realIndex); setShowAllTabs(false); }}
+                        className="font-body font-bold text-[8px] tracking-[2px] uppercase px-2.5 py-1.5 transition-all duration-200"
+                        style={{
+                          color: active === realIndex ? "#CC0000" : "rgba(240,235,227,0.5)",
+                          borderBottom: active === realIndex ? "2px solid #8B0000" : "2px solid transparent",
+                          background: "none",
+                        }}
+                      >
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         {/* Items */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -176,20 +250,20 @@ const MenuSection = () => {
             {MENU[active].items.map((item, i) => (
               <div
                 key={i}
-                className="flex items-start justify-between py-4 transition-colors duration-200 hover:bg-[rgba(139,0,0,0.06)] px-3"
+                className="flex items-start justify-between py-2.5 md:py-4 transition-colors duration-200 hover:bg-[rgba(139,0,0,0.06)] px-3"
                 style={{ borderBottom: "1px solid rgba(139,0,0,0.1)" }}
               >
                 <div>
-                  <p className="font-body font-medium text-[12px]" style={{ color: "#FFFFFF" }}>
+                  <p className="font-body font-medium text-[11px] md:text-[12px]" style={{ color: "#FFFFFF" }}>
                     {item.name}
                   </p>
                   {item.sub && (
-                    <p className="font-body font-light text-[10px] mt-0.5" style={{ color: "rgba(240,235,227,0.5)" }}>
+                    <p className="font-body font-light text-[9px] md:text-[10px] mt-0.5" style={{ color: "rgba(240,235,227,0.5)" }}>
                       {item.sub}
                     </p>
                   )}
                 </div>
-                <p className="font-display text-[22px] shrink-0 ml-4" style={{ color: "#CC0000" }}>
+                <p className="font-display text-[18px] md:text-[22px] shrink-0 ml-4" style={{ color: "#CC0000" }}>
                   {item.price}
                 </p>
               </div>

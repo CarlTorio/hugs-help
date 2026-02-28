@@ -89,10 +89,10 @@ const AboutSection = () => {
 
   return (
     <section id="about" className="relative" style={{ background: "#130000" }}>
-      <div className="max-w-7xl mx-auto px-4 py-[50px] flex items-center justify-center">
+      <div className="max-w-7xl mx-auto px-4 py-[30px] md:py-[50px] flex items-center justify-center">
         {/* Content - Centered */}
         <motion.div
-          className="w-full md:w-2/3 lg:w-1/2 px-6 md:px-16 py-10 md:py-16 flex-col gap-[22px] flex items-center justify-center text-center"
+          className="w-full md:w-2/3 lg:w-1/2 px-4 md:px-16 py-4 md:py-16 flex-col gap-[12px] md:gap-[22px] flex items-center justify-center text-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
@@ -119,37 +119,37 @@ const AboutSection = () => {
 
             More Than Just A Bar
           </motion.h2>
-          <motion.div className="flex flex-col gap-4" variants={childFade}>
-            <p className="font-body font-light text-[14px] leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
+          <motion.div className="flex flex-col gap-2 md:gap-4" variants={childFade}>
+            <p className="font-body font-light text-[13px] md:text-[14px] leading-[1.7] md:leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
               Auxiliary Bar and Lounge is Novaliches' premier destination for unforgettable nights. We blend premium spirits, handcrafted cocktails, and world-class DJ performances into one electrifying experience.
             </p>
-            <p className="font-body font-light text-[14px] leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
+            <p className="font-body font-light text-[13px] md:text-[14px] leading-[1.7] md:leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
               Nestled in the heart of Novaliches Proper, Quezon City, we've created a space where locals come to unwind, celebrate, and lose themselves in the music.
             </p>
-            <p className="font-body font-light text-[14px] leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
+            <p className="font-body font-light text-[13px] md:text-[14px] leading-[1.7] md:leading-[2]" style={{ color: "rgba(240,235,227,0.75)" }}>
               Whether you're here for an intimate night out or a full-blown celebration, Auxiliary promises an atmosphere that hits different every single time.
             </p>
           </motion.div>
 
           {/* Stats */}
           <motion.div
-            className="grid grid-cols-3 gap-3 mt-4"
+            className="grid grid-cols-3 gap-2 md:gap-3 mt-2 md:mt-4"
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}>
 
             {stats.map((s) =>
             <motion.div
               key={s.label}
-              className="border p-4 text-center transition-all duration-300 group"
+              className="border p-2 md:p-4 text-center transition-all duration-300 group"
               style={{ borderColor: "rgba(139,0,0,0.25)" }}
               variants={{ hidden: { opacity: 0, y: 30, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5 } } }}
               onMouseEnter={(e) => e.currentTarget.style.borderTopColor = "#8B0000"}
               onMouseLeave={(e) => e.currentTarget.style.borderTopColor = "rgba(139,0,0,0.25)"}>
 
-                <p className="font-display text-[40px] max-[768px]:text-[28px]" style={{ color: "#CC0000" }}>
+                <p className="font-display text-[24px] md:text-[40px]" style={{ color: "#CC0000" }}>
                   {s.number}
                 </p>
                 <p
-                className="font-body font-semibold text-[9px] tracking-[2.5px]"
+                className="font-body font-semibold text-[7px] md:text-[9px] tracking-[2px] md:tracking-[2.5px]"
                 style={{ color: "rgba(240,235,227,0.6)" }}>
 
                   {s.label}

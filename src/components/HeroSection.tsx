@@ -53,7 +53,7 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
       <motion.img
         src="https://i.imgur.com/HKLn00w.png"
         alt="Auxiliary Logo"
-        className="relative z-10 w-[380px] md:w-[420px] max-[768px]:w-[280px] object-contain mt-24 md:mt-28"
+        className="relative z-10 w-[380px] md:w-[420px] max-[768px]:w-[280px] object-contain mt-32 md:mt-28"
         style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={loaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
