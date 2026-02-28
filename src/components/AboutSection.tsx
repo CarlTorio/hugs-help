@@ -88,8 +88,8 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="relative py-[50px]" style={{ background: "#130000" }}>
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-0">
+    <section id="about" className="relative" style={{ background: "#130000" }}>
+      <div className="max-w-7xl mx-auto px-4 py-[50px] flex flex-col md:flex-row gap-0">
         {/* Left - Content */}
         <motion.div
           className="w-full md:w-1/2 px-6 md:px-16 py-10 md:py-16 flex flex-col justify-center gap-[22px]"
@@ -159,44 +159,42 @@ const AboutSection = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right - Video */}
-        <div ref={sectionRef} className="relative w-full md:w-1/2 h-[280px] md:h-auto md:min-h-[560px] overflow-hidden">
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            onEnded={handleEnded}
-            className="absolute inset-0 w-full h-full object-cover"
-            src="https://i.imgur.com/7zTw3OG.mp4"
-          />
-          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.35)" }} />
-          <div
-            className="absolute inset-0 hidden md:block"
-            style={{ background: "linear-gradient(to left, transparent 70%, #130000 100%)" }}
-          />
+        {/* Right side spacer for layout on desktop */}
+        <div className="hidden md:block w-1/2" />
+      </div>
 
-          {/* Controls overlay */}
-          <div className="absolute bottom-4 right-4 flex gap-2 z-10">
-            {isEnded && (
-              <button
-                onClick={handleReplay}
-                className="p-2 rounded-full backdrop-blur-sm transition-opacity hover:opacity-100 opacity-70"
-                style={{ background: "rgba(0,0,0,0.5)" }}
-              >
-                <Play size={20} color="#fff" />
-              </button>
-            )}
-            {!isEnded && (
-              <button
-                onClick={toggleMute}
-                className="p-2 rounded-full backdrop-blur-sm transition-opacity hover:opacity-100 opacity-70"
-                style={{ background: "rgba(0,0,0,0.5)" }}
-              >
-                {isMuted ? <VolumeX size={20} color="#fff" /> : <Volume2 size={20} color="#fff" />}
-              </button>
-            )}
-          </div>
+      {/* Full-width Video */}
+      <div ref={sectionRef} className="relative w-full" style={{ aspectRatio: "16/9" }}>
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          onEnded={handleEnded}
+          className="absolute inset-0 w-full h-full object-contain"
+          style={{ background: "#000" }}
+          src="https://i.imgur.com/7zTw3OG.mp4"
+        />
+
+        {/* Controls overlay */}
+        <div className="absolute bottom-4 right-4 flex gap-2 z-10">
+          {isEnded && (
+            <button
+              onClick={handleReplay}
+              className="p-2 rounded-full backdrop-blur-sm transition-opacity hover:opacity-100 opacity-70"
+              style={{ background: "rgba(0,0,0,0.5)" }}
+            >
+              <Play size={20} color="#fff" />
+            </button>
+          )}
+          {!isEnded && (
+            <button
+              onClick={toggleMute}
+              className="p-2 rounded-full backdrop-blur-sm transition-opacity hover:opacity-100 opacity-70"
+              style={{ background: "rgba(0,0,0,0.5)" }}
+            >
+              {isMuted ? <VolumeX size={20} color="#fff" /> : <Volume2 size={20} color="#fff" />}
+            </button>
+          )}
         </div>
       </div>
     </section>
