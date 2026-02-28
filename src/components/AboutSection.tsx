@@ -17,33 +17,58 @@ const AboutSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [hasPlayedWithSound, setHasPlayedWithSound] = useState(false);
+  const hasPlayedRef = useRef(false);
+  const isInViewRef = useRef(false);
+  const userInteractedRef = useRef(false);
   const [isEnded, setIsEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Auto-play with sound once when scrolled into view
+  const tryPlayWithSound = () => {
+    if (hasPlayedRef.current || !videoRef.current || !isInViewRef.current || !userInteractedRef.current) return;
+    hasPlayedRef.current = true;
+    const video = videoRef.current;
+    video.loop = false;
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().then(() => {
+      setIsMuted(false);
+      setHasPlayedWithSound(true);
+    }).catch(() => {
+      // Still blocked, keep muted
+      video.muted = true;
+      video.play();
+      setHasPlayedWithSound(true);
+    });
+  };
+
+  // Track user interaction (click, touch, scroll, keydown)
+  useEffect(() => {
+    const markInteracted = () => {
+      userInteractedRef.current = true;
+      tryPlayWithSound();
+    };
+    const events = ["click", "touchstart", "scroll", "keydown"];
+    events.forEach(e => window.addEventListener(e, markInteracted, { once: false, passive: true }));
+    return () => {
+      events.forEach(e => window.removeEventListener(e, markInteracted));
+    };
+  }, []);
+
+  // Observe when section comes into view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasPlayedWithSound && videoRef.current) {
-          const video = videoRef.current;
-          video.muted = false;
-          video.loop = false;
-          video.currentTime = 0;
-          video.play().catch(() => {
-            // Autoplay with sound blocked, fall back to muted
-            video.muted = true;
-            video.play();
-          });
-          setIsMuted(false);
-          setHasPlayedWithSound(true);
+        isInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          tryPlayWithSound();
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, [hasPlayedWithSound]);
+  }, []);
 
   const handleEnded = () => {
     setIsEnded(true);
