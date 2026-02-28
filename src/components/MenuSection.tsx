@@ -196,6 +196,30 @@ const MenuSection = () => {
             ))}
           </motion.div>
         </AnimatePresence>
+
+        {/* CTA */}
+        <div className="text-center mt-14">
+          <p className="font-body font-light text-[13px] mb-4" style={{ color: "rgba(240,235,227,0.7)" }}>
+            Want to host your own event?
+          </p>
+          <a
+            href="https://www.facebook.com/messages/t/853504411170602"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block font-body font-bold text-[12px] tracking-[2.5px] uppercase rounded-full px-10 py-3 transition-all duration-200"
+            style={{ background: "#8B0000", color: "#FFFFFF" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#A80000";
+              e.currentTarget.style.boxShadow = "0 0 20px rgba(139,0,0,0.6)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "#8B0000";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            INQUIRE NOW
+          </a>
+        </div>
       </div>
     </section>
   );
