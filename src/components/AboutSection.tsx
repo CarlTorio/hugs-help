@@ -166,7 +166,7 @@ const AboutSection = () => {
             muted
             playsInline
             onEnded={handleEnded}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-contain"
             src="https://i.imgur.com/7zTw3OG.mp4"
           />
 
