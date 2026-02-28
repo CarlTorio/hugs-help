@@ -27,7 +27,7 @@ const Admin = () => {
     return (
       <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0A0000" }}>
         <form onSubmit={handleLogin} className="w-full max-w-[360px] flex flex-col items-center gap-6">
-          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-32 object-contain" />
+          <img src="https://i.imgur.com/fNOsuUU.png" alt="Logo" className="w-32 object-contain" />
           <p className="font-body font-semibold text-[9px] tracking-[4px] uppercase" style={{ color: "#CC0000" }}>ADMIN ACCESS</p>
           <input
             type="password"

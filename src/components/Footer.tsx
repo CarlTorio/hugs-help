@@ -29,7 +29,7 @@ const Footer = () => {
     <footer style={{ background: "#0A0000", borderTop: "1px solid rgba(139,0,0,0.2)" }} className="px-[5%] pt-[50px] pb-7">
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         <img
-          src="https://i.imgur.com/yM9hN27.png"
+          src="https://i.imgur.com/fNOsuUU.png"
           alt="Logo"
           className="w-40 object-contain cursor-pointer select-none"
           onClick={handleLogoDoubleClick}
