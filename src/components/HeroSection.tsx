@@ -145,8 +145,8 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
             }}>
             BOOK NOW
           </motion.button>
-          <button
-            onClick={goToBooking}
+           <button
+            onClick={() => navigate("/zone")}
             className="font-body font-bold text-[10px] tracking-[2px] uppercase rounded-full px-10 py-2.5 transition-all duration-200 max-[768px]:w-[70%] max-[768px]:max-w-[220px]"
             style={{
               background: "transparent",
@@ -163,7 +163,7 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
               e.currentTarget.style.borderColor = "#FFFFFF";
               e.currentTarget.style.color = "#FFFFFF";
             }}>
-            VIP TABLES
+            ZONE
           </button>
         </motion.div>
 

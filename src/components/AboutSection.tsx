@@ -89,10 +89,10 @@ const AboutSection = () => {
 
   return (
     <section id="about" className="relative" style={{ background: "#130000" }}>
-      <div className="max-w-7xl mx-auto px-4 py-[50px] flex flex-col md:flex-row gap-0">
+      <div className="max-w-7xl mx-auto px-4 py-[50px] flex flex-col md:flex-row items-center gap-0 min-h-[60vh]">
         {/* Left - Content */}
         <motion.div
-          className="w-full md:w-1/2 px-6 md:px-16 py-10 md:py-16 flex flex-col justify-center gap-[22px]"
+          className="w-full md:w-1/2 px-6 md:px-16 py-10 md:py-16 flex flex-col justify-center items-center md:items-start gap-[22px]"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}

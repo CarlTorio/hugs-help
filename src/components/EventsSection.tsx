@@ -61,7 +61,7 @@ const EventsSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.6 }}
             >
-              <div className="h-[220px] overflow-hidden">
+              <div className="aspect-square overflow-hidden">
                 {ev.image_url ? (
                   <img src={ev.image_url} alt={ev.title} className="w-full h-full object-cover brightness-[0.8] group-hover:brightness-100 transition-all duration-300" loading="lazy" />
                 ) : (

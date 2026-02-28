@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import AdminEventEditor from "@/components/admin/AdminEventEditor";
 import AdminBookings from "@/components/admin/AdminBookings";
+import AdminZonePhotos from "@/components/admin/AdminZonePhotos";
+import AdminContactInfo from "@/components/admin/AdminContactInfo";
 
 const ADMIN_PASSWORD = "AUXILIARY";
 
@@ -11,7 +13,7 @@ const Admin = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [activeTab, setActiveTab] = useState<"events" | "bookings">("events");
+  const [activeTab, setActiveTab] = useState<"events" | "bookings" | "zone" | "contact">("events");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +58,13 @@ const Admin = () => {
     );
   }
 
+  const tabs = [
+    { key: "events" as const, label: "EVENT CARDS" },
+    { key: "bookings" as const, label: "BOOKINGS" },
+    { key: "zone" as const, label: "ZONE PHOTOS" },
+    { key: "contact" as const, label: "CONTACT INFO" },
+  ];
+
   return (
     <div className="min-h-screen" style={{ background: "#0A0000" }}>
       <div className="max-w-6xl mx-auto px-4 py-6">
@@ -74,28 +83,30 @@ const Admin = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-6 mb-8" style={{ borderBottom: "1px solid rgba(139,0,0,0.2)" }}>
-          {(["events", "bookings"] as const).map((tab) => (
+        <div className="flex gap-4 md:gap-6 mb-8 overflow-x-auto" style={{ borderBottom: "1px solid rgba(139,0,0,0.2)" }}>
+          {tabs.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className="font-body font-bold text-[10px] tracking-[3px] uppercase pb-3 transition-colors duration-200"
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className="font-body font-bold text-[9px] md:text-[10px] tracking-[2px] md:tracking-[3px] uppercase pb-3 transition-colors duration-200 whitespace-nowrap"
               style={{
-                color: activeTab === tab ? "#CC0000" : "rgba(240,235,227,0.5)",
-                borderBottom: activeTab === tab ? "2px solid #CC0000" : "2px solid transparent",
+                color: activeTab === tab.key ? "#CC0000" : "rgba(240,235,227,0.5)",
                 background: "none",
                 border: "none",
                 borderBottomWidth: 2,
                 borderBottomStyle: "solid",
-                borderBottomColor: activeTab === tab ? "#CC0000" : "transparent",
+                borderBottomColor: activeTab === tab.key ? "#CC0000" : "transparent",
               }}
             >
-              {tab === "events" ? "EVENT CARDS" : "BOOKINGS"}
+              {tab.label}
             </button>
           ))}
         </div>
 
-        {activeTab === "events" ? <AdminEventEditor /> : <AdminBookings />}
+        {activeTab === "events" && <AdminEventEditor />}
+        {activeTab === "bookings" && <AdminBookings />}
+        {activeTab === "zone" && <AdminZonePhotos />}
+        {activeTab === "contact" && <AdminContactInfo />}
       </div>
     </div>
   );
