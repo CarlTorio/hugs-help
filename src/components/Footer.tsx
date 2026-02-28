@@ -4,66 +4,32 @@ const socialLinks = [
 { href: "https://www.facebook.com/messages/t/853504411170602", label: "Messenger", path: "M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.2l3.131 3.26 5.886-3.26-6.558 6.763z" }];
 
 
-const navLinks = ["About", "Menu", "Gallery", "Events", "Book a Table", "Contact"];
-
 const Footer = () => {
-  const scrollTo = (label: string) => {
-    const id = label === "Book a Table" ? "booking" : label.toLowerCase();
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <footer style={{ background: "#0A0000", borderTop: "1px solid rgba(139,0,0,0.2)" }} className="px-[5%] pt-[50px] pb-7">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-0 justify-between">
-        {/* Left */}
-        <div className="text-center md:text-left">
-          <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-16 object-contain mx-auto md:mx-0" />
-          <p className="font-body font-light text-[11px] mt-3 max-w-[240px]" style={{ color: "rgba(240,235,227,0.5)" }}>
-            Novaliches' finest bar and lounge. Premium spirits, unforgettable nights.
-          </p>
-        </div>
-
-        {/* Center */}
-        <div className="flex flex-col items-center">
-          
-          <div className="w-10 h-[1px] mt-4 mb-4" style={{ background: "#8B0000" }} />
-          <div className="flex gap-3">
-            {socialLinks.map((s) =>
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-              style={{ border: "1px solid rgba(139,0,0,0.2)" }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "#8B0000"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#8B0000">
-                  <path d={s.path} />
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* Right */}
-        <div className="text-center md:text-right">
-          <div className="flex flex-col gap-2">
-            {navLinks.map((l) =>
-            <button
-              key={l}
-              onClick={() => scrollTo(l)}
-              className="font-body font-semibold text-[10px] tracking-[2px] uppercase transition-colors duration-200"
-              style={{ color: "rgba(240,235,227,0.5)", background: "none", border: "none", cursor: "pointer" }}
-              onMouseEnter={(e) => e.currentTarget.style.color = "#CC0000"}
-              onMouseLeave={(e) => e.currentTarget.style.color = "rgba(240,235,227,0.5)"}>
-
-                {l}
-              </button>
-            )}
-          </div>
+      <div className="max-w-6xl mx-auto flex flex-col items-center">
+        <img src="https://i.imgur.com/yM9hN27.png" alt="Logo" className="w-28 object-contain" />
+        <p className="font-body font-light text-[11px] mt-4 max-w-[280px] text-center" style={{ color: "rgba(240,235,227,0.5)" }}>
+          Novaliches' finest bar and lounge. Premium spirits, unforgettable nights.
+        </p>
+        <div className="w-10 h-[1px] mt-5 mb-5" style={{ background: "#8B0000" }} />
+        <div className="flex gap-3">
+          {socialLinks.map((s) =>
+          <a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={s.label}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{ border: "1px solid rgba(139,0,0,0.2)" }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "#8B0000"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#8B0000">
+                <path d={s.path} />
+              </svg>
+            </a>
+          )}
         </div>
       </div>
 
