@@ -51,7 +51,7 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
 
       {/* Logo - positioned just below navbar */}
       <motion.img
-        src="https://i.imgur.com/yM9hN27.png"
+        src="https://i.imgur.com/fNOsuUU.png"
         alt="Auxiliary Logo"
         className="relative z-10 w-[380px] md:w-[420px] max-[768px]:w-[280px] object-contain mt-24 md:mt-28"
         style={{ filter: "drop-shadow(0 0 30px rgba(139,0,0,0.6))" }}
