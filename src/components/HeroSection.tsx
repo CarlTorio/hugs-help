@@ -39,7 +39,7 @@ const HeroSection = ({ loaded }: { loaded: boolean }) => {
         loop
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
-        src="https://i.imgur.com/LfCkDP6.mp4" />
+        src="https://i.imgur.com/2LvYUpI.mp4" />
 
       {/* Overlay */}
       <div
