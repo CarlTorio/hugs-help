@@ -33,11 +33,9 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 w-full z-[1000] transition-all duration-300"
+        className="absolute top-0 left-0 w-full z-[1000]"
         style={{
-          background: scrolled ? "rgba(10,0,0,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(139,0,0,0.3)" : "1px solid transparent",
+          background: "transparent",
         }}
       >
         <div className="flex items-center justify-center py-9 px-4">
