@@ -89,10 +89,10 @@ const AboutSection = () => {
 
   return (
     <section id="about" className="relative" style={{ background: "#130000" }}>
-      <div className="max-w-7xl mx-auto px-4 py-[50px] flex flex-col md:flex-row gap-0">
-        {/* Left - Content */}
+      <div className="max-w-7xl mx-auto px-4 py-[50px] flex items-center justify-center">
+        {/* Content - Centered */}
         <motion.div
-          className="w-full md:w-1/2 px-6 md:px-16 py-10 md:py-16 flex-col gap-[22px] flex items-center justify-center"
+          className="w-full md:w-2/3 lg:w-1/2 px-6 md:px-16 py-10 md:py-16 flex-col gap-[22px] flex items-center justify-center text-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
@@ -159,8 +159,6 @@ const AboutSection = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right side spacer for layout on desktop */}
-        <div className="hidden md:block w-1/2" />
       </div>
 
       {/* Full-width Video */}
