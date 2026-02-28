@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const inputStyle: React.CSSProperties = {
   background: "rgba(255,255,255,0.04)",
@@ -26,6 +28,8 @@ const labelStyle: React.CSSProperties = {
 };
 
 const BookingSection = () => {
+  const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     contact: "",
@@ -50,45 +54,48 @@ const BookingSection = () => {
     e.target.style.boxShadow = "none";
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Hi! I'd like to make a reservation at Auxiliary Bar and Lounge. 🍾
+    setSubmitting(true);
 
-📋 Name: ${form.name}
-📞 Contact: ${form.contact}
-📅 Date: ${form.date}
-🕐 Time: ${form.time}
-👥 Guests: ${form.guests}
-🎉 Occasion: ${form.occasion}
-📝 Special Requests: ${form.notes || "None"}`;
+    // Save to database
+    const { error } = await supabase.from("bookings").insert([{
+      name: form.name.trim(),
+      contact: form.contact.trim(),
+      date: form.date,
+      time: form.time,
+      guests: form.guests,
+      occasion: form.occasion,
+      notes: form.notes.trim(),
+    }]);
 
+    if (error) {
+      console.error("Booking error:", error);
+      toast({ title: "Booking failed", description: "Please try again later.", variant: "destructive" });
+      setSubmitting(false);
+      return;
+    }
+
+    // Also send to Messenger
+    const msg = `Hi! I'd like to make a reservation at Auxiliary Bar and Lounge. 🍾\n\n📋 Name: ${form.name}\n📞 Contact: ${form.contact}\n📅 Date: ${form.date}\n🕐 Time: ${form.time}\n👥 Guests: ${form.guests}\n🎉 Occasion: ${form.occasion}\n📝 Special Requests: ${form.notes || "None"}`;
     const encoded = encodeURIComponent(msg);
     window.open(`https://www.facebook.com/messages/t/853504411170602?text=${encoded}`, "_blank");
+
+    toast({ title: "Reservation sent!", description: "We'll confirm your booking shortly." });
+    setForm({ name: "", contact: "", date: "", time: "", guests: "", occasion: "", notes: "" });
+    setSubmitting(false);
   };
 
   return (
     <section id="booking" className="py-[90px] px-4" style={{ background: "#130000" }}>
       <div className="max-w-[680px] mx-auto">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>
-            RESERVATIONS
-          </p>
-          <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>
-            Book Your Table
-          </h2>
-          <p className="font-body font-light text-[13px] mt-2" style={{ color: "rgba(240,235,227,0.6)" }}>
-            Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.
-          </p>
+        <motion.div className="text-center mb-10" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>RESERVATIONS</p>
+          <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>Book Your Table</h2>
+          <p className="font-body font-light text-[13px] mt-2" style={{ color: "rgba(240,235,227,0.6)" }}>Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.</p>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Row 1 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label style={labelStyle}>Full Name</label>
@@ -99,8 +106,6 @@ const BookingSection = () => {
               <input name="contact" value={form.contact} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required placeholder="+63 9XX XXX XXXX" style={inputStyle} />
             </div>
           </div>
-
-          {/* Row 2 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label style={labelStyle}>Date of Reservation</label>
@@ -116,8 +121,6 @@ const BookingSection = () => {
               </select>
             </div>
           </div>
-
-          {/* Row 3 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label style={labelStyle}>Number of Guests</label>
@@ -138,31 +141,21 @@ const BookingSection = () => {
               </select>
             </div>
           </div>
-
-          {/* Row 4 */}
           <div>
             <label style={labelStyle}>Special Requests / Notes</label>
             <textarea name="notes" value={form.notes} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} rows={4} placeholder="Any special requests..." style={inputStyle} />
           </div>
-
-          {/* Submit */}
           <button
             type="submit"
-            className="w-full font-body font-bold text-[12px] tracking-[3px] uppercase rounded-full py-4 transition-all duration-200"
+            disabled={submitting}
+            className="w-full font-body font-bold text-[12px] tracking-[3px] uppercase rounded-full py-4 transition-all duration-200 disabled:opacity-50"
             style={{ background: "#8B0000", color: "#FFFFFF" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#A80000";
-              e.currentTarget.style.boxShadow = "0 0 30px rgba(139,0,0,0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#8B0000";
-              e.currentTarget.style.boxShadow = "none";
-            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#A80000"; e.currentTarget.style.boxShadow = "0 0 30px rgba(139,0,0,0.5)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#8B0000"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            SEND RESERVATION VIA MESSENGER
+            {submitting ? "SENDING..." : "SEND RESERVATION VIA MESSENGER"}
           </button>
         </form>
-
         <p className="text-center mt-6 font-body font-light text-[11px]" style={{ color: "rgba(240,235,227,0.5)" }}>
           Your booking details will be sent directly to our Messenger. We'll confirm your reservation shortly.
         </p>

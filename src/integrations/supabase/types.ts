@@ -10,115 +10,79 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
-      appointments: {
+      bookings: {
         Row: {
-          barber_name: string
-          booking_number: number
-          created_at: string | null
-          customer_email: string | null
-          customer_name: string
-          customer_phone: string
+          contact: string
+          created_at: string
           date: string
-          duration: number | null
+          guests: string
           id: string
-          price: string | null
-          service: string
-          status: string | null
+          name: string
+          notes: string | null
+          occasion: string
+          status: string
           time: string
-          updated_at: string | null
         }
         Insert: {
-          barber_name: string
-          booking_number?: number
-          created_at?: string | null
-          customer_email?: string | null
-          customer_name: string
-          customer_phone: string
+          contact: string
+          created_at?: string
           date: string
-          duration?: number | null
+          guests: string
           id?: string
-          price?: string | null
-          service: string
-          status?: string | null
+          name: string
+          notes?: string | null
+          occasion: string
+          status?: string
           time: string
-          updated_at?: string | null
         }
         Update: {
-          barber_name?: string
-          booking_number?: number
-          created_at?: string | null
-          customer_email?: string | null
-          customer_name?: string
-          customer_phone?: string
+          contact?: string
+          created_at?: string
           date?: string
-          duration?: number | null
+          guests?: string
           id?: string
-          price?: string | null
-          service?: string
-          status?: string | null
+          name?: string
+          notes?: string | null
+          occasion?: string
+          status?: string
           time?: string
-          updated_at?: string | null
         }
         Relationships: []
       }
-      gallery: {
+      events: {
         Row: {
           created_at: string
-          description: string | null
-          display_order: number | null
+          date_label: string
+          description: string
           id: string
-          image_url: string
-          title: string | null
+          image_url: string | null
+          slot: number
+          title: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
-          description?: string | null
-          display_order?: number | null
+          date_label?: string
+          description?: string
           id?: string
-          image_url: string
-          title?: string | null
+          image_url?: string | null
+          slot: number
+          title?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
-          description?: string | null
-          display_order?: number | null
+          date_label?: string
+          description?: string
           id?: string
-          image_url?: string
-          title?: string | null
-        }
-        Relationships: []
-      }
-      unavailability: {
-        Row: {
-          barber_name: string
-          created_at: string | null
-          date: string
-          id: string
-          is_full_day: boolean | null
-          reason: string | null
-          time_slots: string[]
-        }
-        Insert: {
-          barber_name: string
-          created_at?: string | null
-          date: string
-          id?: string
-          is_full_day?: boolean | null
-          reason?: string | null
-          time_slots: string[]
-        }
-        Update: {
-          barber_name?: string
-          created_at?: string | null
-          date?: string
-          id?: string
-          is_full_day?: boolean | null
-          reason?: string | null
-          time_slots?: string[]
+          image_url?: string | null
+          slot?: number
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
