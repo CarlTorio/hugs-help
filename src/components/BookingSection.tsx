@@ -1,168 +1,225 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(139,0,0,0.3)",
-  color: "#FFFFFF",
-  padding: "13px 16px",
-  borderRadius: 0,
-  width: "100%",
-  fontSize: 12,
-  fontFamily: "Montserrat",
-  fontWeight: 300,
-  outline: "none",
-};
+const reservationTypes = [
+  "Regular Table",
+  "VIP Table",
+  "Birthday Celebration",
+  "Event/Party",
+];
 
-const inputStyleMobile: React.CSSProperties = {
-  ...inputStyle,
-  padding: "10px 12px",
-  fontSize: 11,
-};
-
-const labelStyle: React.CSSProperties = {
-  color: "#CC0000",
-  fontSize: 9,
-  fontWeight: 700,
-  letterSpacing: "2.5px",
-  textTransform: "uppercase" as const,
-  fontFamily: "Montserrat",
-  marginBottom: 6,
-  display: "block",
-};
+const timeOptions = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"];
+const guestOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11-15", "16-20", "20+"];
 
 const BookingSection = () => {
   const { toast } = useToast();
-  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     contact: "",
-    date: "",
+    date: undefined as Date | undefined,
     time: "",
     guests: "",
-    occasion: "",
+    type: "",
     notes: "",
   });
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [redirecting, setRedirecting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (value) setErrors((prev) => ({ ...prev, [field]: false }));
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    e.target.style.borderColor = "#8B0000";
-    e.target.style.boxShadow = "0 0 8px rgba(139,0,0,0.3)";
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    e.target.style.borderColor = "rgba(139,0,0,0.3)";
-    e.target.style.boxShadow = "none";
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    // Save to database
-    const { error } = await supabase.from("bookings").insert([{
-      name: form.name.trim(),
-      contact: form.contact.trim(),
-      date: form.date,
-      time: form.time,
-      guests: form.guests,
-      occasion: form.occasion,
-      notes: form.notes.trim(),
-    }]);
-
-    if (error) {
-      console.error("Booking error:", error);
-      toast({ title: "Booking failed", description: "Please try again later.", variant: "destructive" });
-      setSubmitting(false);
-      return;
+  const validate = () => {
+    const required: (keyof typeof form)[] = ["name", "contact", "date", "time", "guests", "type"];
+    const newErrors: Record<string, boolean> = {};
+    let valid = true;
+    for (const field of required) {
+      if (!form[field]) {
+        newErrors[field] = true;
+        valid = false;
+      }
     }
-
-    // Also send to Messenger
-    const msg = `Hi! I'd like to make a reservation at Auxiliary Bar and Lounge. 🍾\n\n📋 Name: ${form.name}\n📞 Contact: ${form.contact}\n📅 Date: ${form.date}\n🕐 Time: ${form.time}\n👥 Guests: ${form.guests}\n🎉 Occasion: ${form.occasion}\n📝 Special Requests: ${form.notes || "None"}`;
-    const encoded = encodeURIComponent(msg);
-    window.open(`https://www.facebook.com/messages/t/853504411170602?text=${encoded}`, "_blank");
-
-    toast({ title: "Reservation sent!", description: "We'll confirm your booking shortly." });
-    setForm({ name: "", contact: "", date: "", time: "", guests: "", occasion: "", notes: "" });
-    setSubmitting(false);
+    setErrors(newErrors);
+    return valid;
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const dateStr = form.date ? format(form.date, "MMMM d, yyyy") : "";
+    const msg = `RESERVATION REQUEST\n━━━━━━━━━━━━━━━━━━\nName: ${form.name.trim()}\nContact: ${form.contact.trim()}\nDate: ${dateStr}\nTime: ${form.time}\nGuests: ${form.guests}\nType: ${form.type}\nSpecial Requests: ${form.notes.trim() || "None"}\n━━━━━━━━━━━━━━━━━━\nSent via Auxiliary Bar Website`;
+    const encoded = encodeURIComponent(msg);
+
+    setRedirecting(true);
+    toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
+
+    setTimeout(() => {
+      window.open(`https://m.me/853504411170602?text=${encoded}`, "_blank");
+      setForm({ name: "", contact: "", date: undefined, time: "", guests: "", type: "", notes: "" });
+      setErrors({});
+      setRedirecting(false);
+    }, 1500);
+  };
+
+  const labelClass = "block font-body font-bold text-[9px] tracking-[2.5px] uppercase mb-1.5 text-[hsl(var(--primary))]";
+  const inputClass = (field: string) =>
+    cn(
+      "w-full bg-[#1A1A1A] border px-4 py-3 text-[12px] font-body font-light text-white placeholder:text-white/30 outline-none transition-all duration-200 focus:border-[hsl(var(--primary))] focus:shadow-[0_0_8px_rgba(139,0,0,0.3)]",
+      errors[field] ? "border-red-500" : "border-white/10"
+    );
+  const errorMsg = (field: string) =>
+    errors[field] ? <p className="text-red-500 text-[10px] font-body mt-1">This field is required</p> : null;
 
   return (
     <section id="booking" className="py-[90px] max-[768px]:py-[40px] px-4 max-[768px]:px-3" style={{ background: "#130000" }}>
-      <div className="max-w-[680px] mx-auto">
+      <div className="max-w-[600px] mx-auto">
         <motion.div className="text-center mb-10 max-[768px]:mb-5" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>RESERVATIONS</p>
-          <h2 className="font-display text-[40px] max-[768px]:text-[24px] mt-2 max-[768px]:mt-1" style={{ color: "#FFFFFF" }}>Book Your Table</h2>
-          <p className="font-body font-light text-[13px] max-[768px]:text-[11px] mt-2 max-[768px]:mt-1" style={{ color: "rgba(240,235,227,0.6)" }}>Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.</p>
+          <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase text-[hsl(var(--primary))]">RESERVATIONS</p>
+          <h2 className="font-display text-[40px] max-[768px]:text-[24px] mt-2 max-[768px]:mt-1 text-white">Book Your Table</h2>
+          <p className="font-body font-light text-[13px] max-[768px]:text-[11px] mt-2 max-[768px]:mt-1 text-white/50">Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.</p>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-5 max-[768px]:space-y-3">
+          {/* Name & Contact */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
             <div>
-              <label style={labelStyle}>Full Name</label>
-              <input name="name" value={form.name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required placeholder="Juan Dela Cruz" style={inputStyle} />
+              <label className={labelClass}>Full Name</label>
+              <input value={form.name} onChange={(e) => handleChange("name", e.target.value)} placeholder="Juan Dela Cruz" className={inputClass("name")} />
+              {errorMsg("name")}
             </div>
             <div>
-              <label style={labelStyle}>Contact Number</label>
-              <input name="contact" value={form.contact} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required placeholder="+63 9XX XXX XXXX" style={inputStyle} />
+              <label className={labelClass}>Contact Number</label>
+              <input value={form.contact} onChange={(e) => handleChange("contact", e.target.value)} placeholder="09XX XXX XXXX" className={inputClass("contact")} />
+              {errorMsg("contact")}
             </div>
           </div>
+
+          {/* Date & Time */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
             <div>
-              <label style={labelStyle}>Date of Reservation</label>
-              <input type="date" name="date" value={form.date} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={{ ...inputStyle, colorScheme: "dark" }} />
+              <label className={labelClass}>Date of Visit</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      inputClass("date"),
+                      "flex items-center justify-between text-left",
+                      !form.date && "text-white/30"
+                    )}
+                  >
+                    {form.date ? format(form.date, "MMMM d, yyyy") : "Pick a date"}
+                    <CalendarIcon className="h-4 w-4 text-white/40" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-[#1A1A1A] border-white/10" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={form.date}
+                    onSelect={(d) => { setForm((p) => ({ ...p, date: d })); if (d) setErrors((p) => ({ ...p, date: false })); }}
+                    disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                    initialFocus
+                    className="p-3 pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+              {errorMsg("date")}
             </div>
             <div>
-              <label style={labelStyle}>Time</label>
-              <select name="time" value={form.time} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={inputStyle}>
+              <label className={labelClass}>Time</label>
+              <select value={form.time} onChange={(e) => handleChange("time", e.target.value)} className={inputClass("time")}>
                 <option value="">Select time</option>
-                {["5:00 PM","6:00 PM","7:00 PM","8:00 PM","9:00 PM","10:00 PM","11:00 PM","12:00 AM","1:00 AM","2:00 AM"].map(t => (
-                  <option key={t} value={t} style={{ background: "#1C0000" }}>{t}</option>
+                {timeOptions.map((t) => (
+                  <option key={t} value={t} style={{ background: "#1A1A1A" }}>{t}</option>
                 ))}
               </select>
+              {errorMsg("time")}
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
-            <div>
-              <label style={labelStyle}>Number of Guests</label>
-              <select name="guests" value={form.guests} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={inputStyle}>
-                <option value="">Select</option>
-                {["1–2","3–5","6–10","10–20","20+ Private"].map(g => (
-                  <option key={g} value={g} style={{ background: "#1C0000" }}>{g}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label style={labelStyle}>Occasion</label>
-              <select name="occasion" value={form.occasion} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={inputStyle}>
-                <option value="">Select</option>
-                {["Regular Night Out","Birthday","Debut","Anniversary","Company Party","Barkada Night","Private Event","Other"].map(o => (
-                  <option key={o} value={o} style={{ background: "#1C0000" }}>{o}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+
+          {/* Guests */}
           <div>
-            <label style={labelStyle}>Special Requests / Notes</label>
-            <textarea name="notes" value={form.notes} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} rows={4} placeholder="Any special requests..." style={inputStyle} />
+            <label className={labelClass}>Number of Guests</label>
+            <select value={form.guests} onChange={(e) => handleChange("guests", e.target.value)} className={inputClass("guests")}>
+              <option value="">Select</option>
+              {guestOptions.map((g) => (
+                <option key={g} value={g} style={{ background: "#1A1A1A" }}>{g}</option>
+              ))}
+            </select>
+            {errorMsg("guests")}
           </div>
+
+          {/* Reservation Type */}
+          <div>
+            <label className={labelClass}>Reservation Type</label>
+            <div className="flex flex-wrap gap-4 mt-2">
+              {reservationTypes.map((t) => (
+                <label key={t} className="flex items-center gap-2 cursor-pointer group">
+                  <span
+                    className={cn(
+                      "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-200",
+                      form.type === t
+                        ? "border-[hsl(var(--primary))] bg-[hsl(var(--primary))]"
+                        : errors.type
+                        ? "border-red-500"
+                        : "border-white/20 group-hover:border-white/40"
+                    )}
+                  >
+                    {form.type === t && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                  </span>
+                  <span className="font-body text-[12px] text-white/70 group-hover:text-white/90 transition-colors">{t}</span>
+                  <input
+                    type="radio"
+                    name="type"
+                    value={t}
+                    checked={form.type === t}
+                    onChange={(e) => handleChange("type", e.target.value)}
+                    className="sr-only"
+                  />
+                </label>
+              ))}
+            </div>
+            {errorMsg("type")}
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className={labelClass}>Special Requests</label>
+            <textarea
+              value={form.notes}
+              onChange={(e) => handleChange("notes", e.target.value)}
+              rows={4}
+              placeholder="Any special requests or notes..."
+              className={inputClass("notes")}
+            />
+          </div>
+
+          {/* Submit */}
           <button
             type="submit"
-            disabled={submitting}
-            className="w-full font-body font-bold text-[12px] max-[768px]:text-[10px] tracking-[3px] max-[768px]:tracking-[2px] uppercase rounded-full py-4 max-[768px]:py-3 transition-all duration-200 disabled:opacity-50"
-            style={{ background: "#8B0000", color: "#FFFFFF" }}
+            disabled={redirecting}
+            className="w-full font-body font-bold text-[12px] max-[768px]:text-[10px] tracking-[3px] max-[768px]:tracking-[2px] uppercase rounded-full py-4 max-[768px]:py-3 transition-all duration-200 disabled:opacity-50 text-white animate-[pulseGlow_2s_ease-in-out_infinite]"
+            style={{ background: "#8B0000" }}
             onMouseEnter={(e) => { e.currentTarget.style.background = "#A80000"; e.currentTarget.style.boxShadow = "0 0 30px rgba(139,0,0,0.5)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "#8B0000"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#8B0000"; e.currentTarget.style.boxShadow = ""; }}
           >
-            {submitting ? "SENDING..." : "SEND RESERVATION VIA MESSENGER"}
+            {redirecting ? "REDIRECTING TO MESSENGER..." : "SEND RESERVATION"}
           </button>
         </form>
-        <p className="text-center mt-6 font-body font-light text-[11px]" style={{ color: "rgba(240,235,227,0.5)" }}>
+
+        <p className="text-center mt-6 font-body font-light text-[11px] text-white/40">
           Your booking details will be sent directly to our Messenger. We'll confirm your reservation shortly.
         </p>
       </div>

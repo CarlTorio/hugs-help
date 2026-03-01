@@ -169,3 +169,12 @@ All colors MUST be HSL.
   transform: translateY(-4px);
   box-shadow: var(--shadow-medium);
 }
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 0, 0, 0.6), 0 0 50px rgba(139, 0, 0, 0.2);
+  }
+}
