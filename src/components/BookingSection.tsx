@@ -78,7 +78,7 @@ const BookingSection = () => {
     setErrors({});
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -88,6 +88,11 @@ const BookingSection = () => {
       setPendingMessage(msg);
       setCopied(false);
       setShowMobileModal(true);
+      // Auto-copy message to clipboard immediately
+      try {
+        await navigator.clipboard.writeText(msg);
+        setCopied(true);
+      } catch {}
     } else {
       const encoded = encodeURIComponent(msg);
       setRedirecting(true);
@@ -273,7 +278,7 @@ const BookingSection = () => {
           <DialogHeader>
             <DialogTitle className="font-display text-xl text-white">Your Reservation Message</DialogTitle>
             <DialogDescription className="text-white/50 text-xs">
-              Copy the message below, then open Messenger and paste it to complete your reservation.
+              Your reservation message has been copied to your clipboard! Open Messenger below and paste it to send.
             </DialogDescription>
           </DialogHeader>
           <div className="bg-black/40 border border-white/10 rounded p-4 max-h-[40vh] overflow-y-auto">
