@@ -16,6 +16,12 @@ const inputStyle: React.CSSProperties = {
   outline: "none",
 };
 
+const inputStyleMobile: React.CSSProperties = {
+  ...inputStyle,
+  padding: "10px 12px",
+  fontSize: 11,
+};
+
 const labelStyle: React.CSSProperties = {
   color: "#CC0000",
   fontSize: 9,
@@ -87,16 +93,16 @@ const BookingSection = () => {
   };
 
   return (
-    <section id="booking" className="py-[90px] px-4" style={{ background: "#130000" }}>
+    <section id="booking" className="py-[90px] max-[768px]:py-[40px] px-4 max-[768px]:px-3" style={{ background: "#130000" }}>
       <div className="max-w-[680px] mx-auto">
-        <motion.div className="text-center mb-10" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <motion.div className="text-center mb-10 max-[768px]:mb-5" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <p className="font-body font-semibold text-[9px] tracking-[5px] uppercase" style={{ color: "#CC0000" }}>RESERVATIONS</p>
-          <h2 className="font-display text-[40px] max-[768px]:text-[30px] mt-2" style={{ color: "#FFFFFF" }}>Book Your Table</h2>
-          <p className="font-body font-light text-[13px] mt-2" style={{ color: "rgba(240,235,227,0.6)" }}>Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.</p>
+          <h2 className="font-display text-[40px] max-[768px]:text-[24px] mt-2 max-[768px]:mt-1" style={{ color: "#FFFFFF" }}>Book Your Table</h2>
+          <p className="font-body font-light text-[13px] max-[768px]:text-[11px] mt-2 max-[768px]:mt-1" style={{ color: "rgba(240,235,227,0.6)" }}>Reserve your spot at Auxiliary. Fill out the form and we'll confirm via Messenger.</p>
         </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <form onSubmit={handleSubmit} className="space-y-5 max-[768px]:space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
             <div>
               <label style={labelStyle}>Full Name</label>
               <input name="name" value={form.name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required placeholder="Juan Dela Cruz" style={inputStyle} />
@@ -106,7 +112,7 @@ const BookingSection = () => {
               <input name="contact" value={form.contact} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required placeholder="+63 9XX XXX XXXX" style={inputStyle} />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
             <div>
               <label style={labelStyle}>Date of Reservation</label>
               <input type="date" name="date" value={form.date} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={{ ...inputStyle, colorScheme: "dark" }} />
@@ -121,7 +127,7 @@ const BookingSection = () => {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-[768px]:gap-3">
             <div>
               <label style={labelStyle}>Number of Guests</label>
               <select name="guests" value={form.guests} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} required style={inputStyle}>
@@ -148,7 +154,7 @@ const BookingSection = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full font-body font-bold text-[12px] tracking-[3px] uppercase rounded-full py-4 transition-all duration-200 disabled:opacity-50"
+            className="w-full font-body font-bold text-[12px] max-[768px]:text-[10px] tracking-[3px] max-[768px]:tracking-[2px] uppercase rounded-full py-4 max-[768px]:py-3 transition-all duration-200 disabled:opacity-50"
             style={{ background: "#8B0000", color: "#FFFFFF" }}
             onMouseEnter={(e) => { e.currentTarget.style.background = "#A80000"; e.currentTarget.style.boxShadow = "0 0 30px rgba(139,0,0,0.5)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = "#8B0000"; e.currentTarget.style.boxShadow = "none"; }}

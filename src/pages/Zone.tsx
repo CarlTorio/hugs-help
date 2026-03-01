@@ -29,6 +29,7 @@ const Zone = () => {
   const [photos, setPhotos] = useState<string[]>([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setPhotos(getZonePhotos());
   }, []);
 

@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import BookingSection from "@/components/BookingSection";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 const Book = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen noise-overlay" style={{ background: "#0A0000" }}>

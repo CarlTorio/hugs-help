@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -12,8 +12,16 @@ import LocationSection from "@/components/LocationSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  const [loaded, setLoaded] = useState(false);
-  const handleComplete = useCallback(() => setLoaded(true), []);
+  const alreadyLoaded = sessionStorage.getItem("aux_loaded") === "true";
+  const [loaded, setLoaded] = useState(alreadyLoaded);
+  const handleComplete = useCallback(() => {
+    sessionStorage.setItem("aux_loaded", "true");
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="noise-overlay">
