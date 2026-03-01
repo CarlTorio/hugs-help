@@ -93,7 +93,7 @@ const BookingSection = () => {
       setRedirecting(true);
       toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
       setTimeout(() => {
-        window.open(`https://www.facebook.com/messages/t/853504411170602/?text=${encoded}`, "_blank");
+        window.open(`https://m.me/853504411170602?text=${encoded}`, "_blank");
         resetForm();
         setRedirecting(false);
       }, 1500);
