@@ -78,7 +78,7 @@ const BookingSection = () => {
     setErrors({});
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -88,17 +88,12 @@ const BookingSection = () => {
       setPendingMessage(msg);
       setCopied(false);
       setShowMobileModal(true);
-      // Auto-copy message to clipboard immediately
-      try {
-        await navigator.clipboard.writeText(msg);
-        setCopied(true);
-      } catch {}
     } else {
       const encoded = encodeURIComponent(msg);
       setRedirecting(true);
       toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
       setTimeout(() => {
-        window.open(`fb-messenger://user-thread/853504411170602?text=${encoded}`, "_blank");
+        window.open(`https://www.facebook.com/messages/t/853504411170602/?text=${encoded}`, "_blank");
         resetForm();
         setRedirecting(false);
       }, 1500);
@@ -116,7 +111,7 @@ const BookingSection = () => {
   };
 
   const handleOpenMessenger = () => {
-    window.open("fb-messenger://user-thread/853504411170602", "_blank");
+    window.open("https://m.me/853504411170602", "_blank");
     setShowMobileModal(false);
     resetForm();
   };
@@ -278,7 +273,7 @@ const BookingSection = () => {
           <DialogHeader>
             <DialogTitle className="font-display text-xl text-white">Your Reservation Message</DialogTitle>
             <DialogDescription className="text-white/50 text-xs">
-              Your reservation message has been copied to your clipboard! Open Messenger below and paste it to send.
+              Copy the message below, then open Messenger and paste it to complete your reservation.
             </DialogDescription>
           </DialogHeader>
           <div className="bg-black/40 border border-white/10 rounded p-4 max-h-[40vh] overflow-y-auto">
