@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Copy, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -10,6 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const reservationTypes = [
   "Regular Table",
@@ -34,6 +41,13 @@ const BookingSection = () => {
   });
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [redirecting, setRedirecting] = useState(false);
+  const [showMobileModal, setShowMobileModal] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+  };
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -54,23 +68,52 @@ const BookingSection = () => {
     return valid;
   };
 
+  const buildMessage = () => {
+    const dateStr = form.date ? format(form.date, "MMMM d, yyyy") : "";
+    return `RESERVATION REQUEST\n━━━━━━━━━━━━━━━━━━\nName: ${form.name.trim()}\nContact: ${form.contact.trim()}\nDate: ${dateStr}\nTime: ${form.time}\nGuests: ${form.guests}\nType: ${form.type}\nSpecial Requests: ${form.notes.trim() || "None"}\n━━━━━━━━━━━━━━━━━━\nSent via Auxiliary Bar Website`;
+  };
+
+  const resetForm = () => {
+    setForm({ name: "", contact: "", date: undefined, time: "", guests: "", type: "", notes: "" });
+    setErrors({});
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    const dateStr = form.date ? format(form.date, "MMMM d, yyyy") : "";
-    const msg = `RESERVATION REQUEST\n━━━━━━━━━━━━━━━━━━\nName: ${form.name.trim()}\nContact: ${form.contact.trim()}\nDate: ${dateStr}\nTime: ${form.time}\nGuests: ${form.guests}\nType: ${form.type}\nSpecial Requests: ${form.notes.trim() || "None"}\n━━━━━━━━━━━━━━━━━━\nSent via Auxiliary Bar Website`;
-    const encoded = encodeURIComponent(msg);
+    const msg = buildMessage();
 
-    setRedirecting(true);
-    toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
+    if (isMobile()) {
+      setPendingMessage(msg);
+      setCopied(false);
+      setShowMobileModal(true);
+    } else {
+      const encoded = encodeURIComponent(msg);
+      setRedirecting(true);
+      toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
+      setTimeout(() => {
+        window.open(`https://www.facebook.com/messages/t/853504411170602/?text=${encoded}`, "_blank");
+        resetForm();
+        setRedirecting(false);
+      }, 1500);
+    }
+  };
 
-    setTimeout(() => {
-      window.open(`https://www.messenger.com/t/853504411170602?text=${encoded}`, "_blank");
-      setForm({ name: "", contact: "", date: undefined, time: "", guests: "", type: "", notes: "" });
-      setErrors({});
-      setRedirecting(false);
-    }, 1500);
+  const handleCopyMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(pendingMessage);
+      setCopied(true);
+      toast({ title: "Copied!", description: "Message copied to clipboard." });
+    } catch {
+      toast({ title: "Copy failed", description: "Please select and copy the text manually." });
+    }
+  };
+
+  const handleOpenMessenger = () => {
+    window.open("https://m.me/853504411170602", "_blank");
+    setShowMobileModal(false);
+    resetForm();
   };
 
   const labelClass = "block font-body font-bold text-[9px] tracking-[2.5px] uppercase mb-1.5 text-[hsl(var(--primary))]";
@@ -223,6 +266,43 @@ const BookingSection = () => {
           Your booking details will be sent directly to our Messenger. We'll confirm your reservation shortly.
         </p>
       </div>
+
+      {/* Mobile Fallback Modal */}
+      <Dialog open={showMobileModal} onOpenChange={setShowMobileModal}>
+        <DialogContent className="bg-[#1A1A1A] border-white/10 text-white max-w-[90vw] sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl text-white">Your Reservation Message</DialogTitle>
+            <DialogDescription className="text-white/50 text-xs">
+              Copy the message below, then open Messenger and paste it to complete your reservation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="bg-black/40 border border-white/10 rounded p-4 max-h-[40vh] overflow-y-auto">
+            <pre className="whitespace-pre-wrap text-[11px] font-body text-white/80 leading-relaxed">{pendingMessage}</pre>
+          </div>
+          <div className="flex flex-col gap-3 mt-2">
+            <button
+              onClick={handleCopyMessage}
+              className={cn(
+                "w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase rounded-full py-3 transition-all duration-200 border",
+                copied
+                  ? "border-green-500 text-green-400 bg-green-500/10"
+                  : "border-white/20 text-white hover:border-white/40 hover:bg-white/5"
+              )}
+            >
+              <Copy className="w-4 h-4" />
+              {copied ? "COPIED!" : "COPY MESSAGE"}
+            </button>
+            <button
+              onClick={handleOpenMessenger}
+              className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase rounded-full py-3 transition-all duration-200 text-white animate-[pulseGlow_2s_ease-in-out_infinite]"
+              style={{ background: "#8B0000" }}
+            >
+              <MessageCircle className="w-4 h-4" />
+              OPEN MESSENGER
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
