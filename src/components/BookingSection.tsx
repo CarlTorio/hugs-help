@@ -93,7 +93,7 @@ const BookingSection = () => {
       setRedirecting(true);
       toast({ title: "Redirecting to Messenger...", description: "Please wait a moment." });
       setTimeout(() => {
-        window.open(`https://m.me/853504411170602?text=${encoded}`, "_blank");
+        window.open(`fb-messenger://user-thread/853504411170602?text=${encoded}`, "_blank");
         resetForm();
         setRedirecting(false);
       }, 1500);
@@ -111,7 +111,7 @@ const BookingSection = () => {
   };
 
   const handleOpenMessenger = () => {
-    window.open("https://m.me/853504411170602", "_blank");
+    window.open("fb-messenger://user-thread/853504411170602", "_blank");
     setShowMobileModal(false);
     resetForm();
   };
