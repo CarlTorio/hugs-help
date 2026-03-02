@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight, Archive, Trash2, Receipt, ExternalLink } from "lucide-react";
+import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight, Archive, Trash2, Receipt, ExternalLink, Phone } from "lucide-react";
 import { format, startOfWeek, endOfWeek, isToday, parseISO } from "date-fns";
 import { Reservation, STATUS_COLORS, fromBookingRow } from "@/lib/reservations";
 import { useToast } from "@/hooks/use-toast";
@@ -229,6 +229,9 @@ const AdminReservations = () => {
                             <Archive size={14} className="text-amber-500/60" />
                           </button>
                         )}
+                        <a href={`tel:${r.contact_number}`} className="p-1 rounded hover:bg-white/10 transition-colors" title="Call client">
+                          <Phone size={14} className="text-green-500/60" />
+                        </a>
                         <button onClick={() => deleteReservation(r.id)} className="p-1 rounded hover:bg-white/10 transition-colors" title="Delete">
                           <Trash2 size={14} className="text-red-500/60" />
                         </button>
@@ -283,6 +286,9 @@ const AdminReservations = () => {
                     <ActionBtn label="Archive" color="#D4A017" onClick={() => updateStatus(r.id, "archived")} />
                   )}
                   <ActionBtn label="Delete" color="#CC0000" onClick={() => deleteReservation(r.id)} />
+                  <a href={`tel:${r.contact_number}`}>
+                    <ActionBtn label="Call" color="#2D7D2D" onClick={() => {}} />
+                  </a>
                   <button onClick={() => openDetails(r)} className="font-body text-[9px] tracking-[1px] uppercase px-2 py-1 rounded-sm transition-colors" style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(240,235,227,0.6)" }}>
                     Details
                   </button>
@@ -362,6 +368,14 @@ const AdminReservations = () => {
                   Save Notes
                 </button>
               </div>
+              {/* Call Client Button in modal */}
+              <a
+                href={`tel:${selectedReservation.contact_number}`}
+                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[10px] tracking-[2px] uppercase py-2.5 rounded-sm transition-all duration-200 text-white"
+                style={{ background: "#2D7D2D", border: "1px solid rgba(45,125,45,0.4)" }}
+              >
+                <Phone size={12} /> CALL {selectedReservation.contact_number}
+              </a>
               <p className="font-body text-[10px] text-white/30">Submitted: {format(parseISO(selectedReservation.created_at), "MMMM d, yyyy 'at' h:mm a")}</p>
             </div>
           )}
