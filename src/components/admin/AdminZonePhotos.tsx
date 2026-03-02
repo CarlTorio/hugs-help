@@ -1,23 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Plus, Save } from "lucide-react";
-import { getZonePhotos } from "@/pages/Zone";
+import { Trash2, Plus, Upload, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { getSetting, setSetting } from "@/lib/settings";
 
 const MAX_PHOTOS = 20;
+
+const DEFAULT_PHOTOS = [
+  "https://i.imgur.com/0Dhizhi.jpeg",
+  "https://i.imgur.com/OY2szyb.jpeg",
+  "https://i.imgur.com/x8R9AKQ.jpeg",
+  "https://i.imgur.com/6XUaBES.jpeg",
+  "https://i.imgur.com/KM3bpwp.jpeg",
+  "https://i.imgur.com/YIKG10V.jpeg",
+  "https://i.imgur.com/grk9EHX.jpeg",
+  "https://i.imgur.com/b3eCPi0.jpeg",
+  "https://i.imgur.com/iN0I9Qu.jpeg",
+  "https://i.imgur.com/Xjt2UbG.jpeg",
+];
 
 const AdminZonePhotos = () => {
   const { toast } = useToast();
   const [photos, setPhotos] = useState<string[]>([]);
   const [newUrl, setNewUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setPhotos(getZonePhotos());
+    loadPhotos();
   }, []);
 
-  const save = (updated: string[]) => {
+  const loadPhotos = async () => {
+    setLoading(true);
+    try {
+      const raw = await getSetting("zone_photos");
+      if (raw) {
+        setPhotos(JSON.parse(raw));
+      } else {
+        setPhotos(DEFAULT_PHOTOS);
+      }
+    } catch {
+      setPhotos(DEFAULT_PHOTOS);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const save = async (updated: string[]) => {
     setPhotos(updated);
-    localStorage.setItem("zone_photos", JSON.stringify(updated));
-    toast({ title: "Zone photos saved!" });
+    const ok = await setSetting("zone_photos", JSON.stringify(updated));
+    if (ok) {
+      toast({ title: "Zone photos saved!" });
+    } else {
+      toast({ title: "Error saving photos", variant: "destructive" });
+    }
   };
 
   const handleAdd = () => {
@@ -28,6 +65,54 @@ const AdminZonePhotos = () => {
     }
     save([...photos, newUrl.trim()]);
     setNewUrl("");
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const remaining = MAX_PHOTOS - photos.length;
+    if (remaining <= 0) {
+      toast({ title: "Maximum 20 photos reached", variant: "destructive" });
+      return;
+    }
+
+    const filesToUpload = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    const newUrls: string[] = [];
+
+    try {
+      for (const file of filesToUpload) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+        const { error } = await supabase.storage
+          .from("zone-photos")
+          .upload(fileName, file, { contentType: file.type });
+
+        if (error) {
+          console.error("Upload error:", error);
+          continue;
+        }
+
+        const { data: urlData } = supabase.storage
+          .from("zone-photos")
+          .getPublicUrl(fileName);
+
+        newUrls.push(urlData.publicUrl);
+      }
+
+      if (newUrls.length > 0) {
+        await save([...photos, ...newUrls]);
+        toast({ title: `${newUrls.length} photo(s) uploaded!` });
+      }
+    } catch (err) {
+      console.error("Upload failed:", err);
+      toast({ title: "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const handleDelete = (index: number) => {
@@ -46,6 +131,14 @@ const AdminZonePhotos = () => {
     flex: 1,
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-white/40 font-body text-[12px]">
+        <Loader2 size={14} className="animate-spin" /> Loading photos…
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -54,12 +147,33 @@ const AdminZonePhotos = () => {
         </p>
       </div>
 
-      {/* Add new photo */}
+      {/* Upload photos */}
+      <div className="flex gap-2 mb-3">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading || photos.length >= MAX_PHOTOS}
+          className="flex items-center gap-1.5 font-body font-bold text-[10px] tracking-[2px] uppercase px-5 py-2.5 transition-all duration-200 disabled:opacity-50"
+          style={{ background: "#8B0000", color: "#FFFFFF" }}
+        >
+          {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+          {uploading ? "UPLOADING..." : "UPLOAD PHOTOS"}
+        </button>
+      </div>
+
+      {/* Add by URL */}
       <div className="flex gap-2 mb-6">
         <input
           value={newUrl}
           onChange={(e) => setNewUrl(e.target.value)}
-          placeholder="Paste image URL..."
+          placeholder="Or paste image URL..."
           style={inputStyle}
         />
         <button

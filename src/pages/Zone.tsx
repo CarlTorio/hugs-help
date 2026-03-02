@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
+import { getSetting } from "@/lib/settings";
 
 const DEFAULT_PHOTOS = [
   "https://i.imgur.com/0Dhizhi.jpeg",
@@ -16,22 +17,27 @@ const DEFAULT_PHOTOS = [
   "https://i.imgur.com/Xjt2UbG.jpeg",
 ];
 
-export const getZonePhotos = (): string[] => {
-  const stored = localStorage.getItem("zone_photos");
-  if (stored) {
-    try { return JSON.parse(stored); } catch { /* fallback */ }
-  }
-  return DEFAULT_PHOTOS;
-};
-
 const Zone = () => {
   const navigate = useNavigate();
   const [photos, setPhotos] = useState<string[]>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setPhotos(getZonePhotos());
+    loadPhotos();
   }, []);
+
+  const loadPhotos = async () => {
+    try {
+      const raw = await getSetting("zone_photos");
+      if (raw) {
+        setPhotos(JSON.parse(raw));
+      } else {
+        setPhotos(DEFAULT_PHOTOS);
+      }
+    } catch {
+      setPhotos(DEFAULT_PHOTOS);
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ background: "#0D0000" }}>
@@ -62,7 +68,7 @@ const Zone = () => {
             <div className="mx-auto mt-3" style={{ width: 60, height: 1, background: "#8B0000" }} />
           </div>
 
-          {/* Grid - same layout as GallerySection */}
+          {/* Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {photos.map((src, i) => {
               const isFeature = i === 0 || i === 4;
