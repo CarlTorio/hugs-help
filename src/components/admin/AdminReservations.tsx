@@ -25,8 +25,7 @@ const AdminReservations = () => {
 
   const fetchReservations = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("bookings")
+    const { data, error } = await (supabase.from as any)("bookings")
       .select("*")
       .order("created_at", { ascending: false });
     if (!error && data) setReservations(data.map(fromBookingRow));
@@ -71,7 +70,7 @@ const AdminReservations = () => {
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   const updateStatus = async (id: string, newStatus: string) => {
-    const { error } = await supabase.from("bookings").update({ status: newStatus }).eq("id", id);
+    const { error } = await (supabase.from as any)("bookings").update({ status: newStatus }).eq("id", id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
@@ -83,7 +82,7 @@ const AdminReservations = () => {
 
   const deleteReservation = async (id: string) => {
     if (!confirm("Are you sure you want to permanently delete this reservation?")) return;
-    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    const { error } = await (supabase.from as any)("bookings").delete().eq("id", id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
@@ -95,7 +94,7 @@ const AdminReservations = () => {
 
   const saveNotes = async () => {
     if (!selectedReservation) return;
-    const { error } = await supabase.from("bookings").update({ notes: adminNotes }).eq("id", selectedReservation.id);
+    const { error } = await (supabase.from as any)("bookings").update({ notes: adminNotes }).eq("id", selectedReservation.id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {

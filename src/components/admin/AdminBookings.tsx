@@ -21,7 +21,7 @@ const AdminBookings = () => {
 
   const fetchBookings = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("bookings").select("*").order("created_at", { ascending: false });
+    const { data, error } = await (supabase.from as any)("bookings").select("*").order("created_at", { ascending: false });
     if (!error && data) setBookings(data as Booking[]);
     setLoading(false);
   };

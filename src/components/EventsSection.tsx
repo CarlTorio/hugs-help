@@ -22,8 +22,7 @@ const EventsSection = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const { data, error } = await supabase
-        .from("events")
+      const { data, error } = await (supabase.from as any)("events")
         .select("*")
         .order("slot", { ascending: true });
       if (!error && data && data.length > 0) {
