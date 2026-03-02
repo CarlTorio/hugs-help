@@ -18,14 +18,26 @@ export interface Reservation {
 export type ReservationInsert = Omit<Reservation, "id" | "status" | "admin_notes" | "created_at">;
 
 export const TABLE_TYPES = [
-  { value: "standing-small", label: "Standing Table — Small (2-4 pax)", minPax: 2, maxPax: 4 },
-  { value: "standing-big", label: "Standing Table — Big (4-8 pax)", minPax: 4, maxPax: 8 },
-  { value: "vip-1-3", label: "VIP Table 1-3 (5-7 pax)", minPax: 5, maxPax: 7 },
-  { value: "vip-4-9", label: "VIP Table 4-9 (8-10 pax)", minPax: 8, maxPax: 10 },
-  { value: "vip-10", label: "VIP Table 10 (10-12 pax)", minPax: 10, maxPax: 12 },
+  { value: "standing-small", label: "Standing Table — Small (2-4 pax)", minPax: 2, maxPax: 4, price: 1500 },
+  { value: "standing-big", label: "Standing Table — Big (4-8 pax)", minPax: 4, maxPax: 8, price: 2500 },
+  { value: "vip-1-3", label: "VIP Table 1-3 (5-7 pax)", minPax: 5, maxPax: 7, price: 5000 },
+  { value: "vip-4-9", label: "VIP Table 4-9 (8-10 pax)", minPax: 8, maxPax: 10, price: 7000 },
+  { value: "vip-10", label: "VIP Table 10 (10-12 pax)", minPax: 10, maxPax: 12, price: 10000 },
 ] as const;
 
-export const TIME_OPTIONS = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"];
+// Time slots: 9PM-11PM same day, 12AM-5AM = next day
+export const TIME_SLOTS = [
+  { label: "9:00 PM", value: "9:00 PM", isNextDay: false },
+  { label: "10:00 PM", value: "10:00 PM", isNextDay: false },
+  { label: "11:00 PM", value: "11:00 PM", isNextDay: false },
+  { label: "12:00 AM", value: "12:00 AM", isNextDay: true },
+  { label: "1:00 AM", value: "1:00 AM", isNextDay: true },
+  { label: "2:00 AM", value: "2:00 AM", isNextDay: true },
+  { label: "3:00 AM", value: "3:00 AM", isNextDay: true },
+  { label: "4:00 AM", value: "4:00 AM", isNextDay: true },
+  { label: "5:00 AM", value: "5:00 AM", isNextDay: true },
+] as const;
+
 export const PAX_OPTIONS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export const PRICING = {
