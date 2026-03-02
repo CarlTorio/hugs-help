@@ -10,82 +10,11 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.4"
+    PostgrestVersion: "14.1"
   }
   public: {
     Tables: {
-      bookings: {
-        Row: {
-          contact: string
-          created_at: string
-          date: string
-          guests: string
-          id: string
-          name: string
-          notes: string | null
-          occasion: string
-          status: string
-          time: string
-        }
-        Insert: {
-          contact: string
-          created_at?: string
-          date: string
-          guests: string
-          id?: string
-          name: string
-          notes?: string | null
-          occasion: string
-          status?: string
-          time: string
-        }
-        Update: {
-          contact?: string
-          created_at?: string
-          date?: string
-          guests?: string
-          id?: string
-          name?: string
-          notes?: string | null
-          occasion?: string
-          status?: string
-          time?: string
-        }
-        Relationships: []
-      }
-      events: {
-        Row: {
-          created_at: string
-          date_label: string
-          description: string
-          id: string
-          image_url: string | null
-          slot: number
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          date_label?: string
-          description?: string
-          id?: string
-          image_url?: string | null
-          slot: number
-          title?: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          date_label?: string
-          description?: string
-          id?: string
-          image_url?: string | null
-          slot?: number
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
