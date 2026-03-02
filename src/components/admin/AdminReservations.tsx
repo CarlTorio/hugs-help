@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, startOfWeek, endOfWeek, isToday, parseISO } from "date-fns";
-import { Reservation, STATUS_COLORS } from "@/lib/reservations";
+import { Reservation, STATUS_COLORS, fromBookingRow } from "@/lib/reservations";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -26,10 +26,10 @@ const AdminReservations = () => {
   const fetchReservations = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("reservations" as any)
+      .from("bookings")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error && data) setReservations(data as unknown as Reservation[]);
+    if (!error && data) setReservations(data.map(fromBookingRow));
     setLoading(false);
   };
 
@@ -67,7 +67,7 @@ const AdminReservations = () => {
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   const updateStatus = async (id: string, newStatus: string) => {
-    const { error } = await supabase.from("reservations" as any).update({ status: newStatus } as any).eq("id", id);
+    const { error } = await supabase.from("bookings").update({ status: newStatus }).eq("id", id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
@@ -79,7 +79,7 @@ const AdminReservations = () => {
 
   const saveNotes = async () => {
     if (!selectedReservation) return;
-    const { error } = await supabase.from("reservations" as any).update({ admin_notes: adminNotes } as any).eq("id", selectedReservation.id);
+    const { error } = await supabase.from("bookings").update({ notes: adminNotes }).eq("id", selectedReservation.id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
