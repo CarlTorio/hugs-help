@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Upload, CheckCircle2, ArrowLeft, Loader2, ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatPeso } from "@/lib/reservations";
-import { getGcashNumber, getGcashName } from "@/components/admin/AdminSettings";
+import { getSettings } from "@/lib/settings";
 import gcashLogo from "@/assets/gcash-logo.png";
 
 interface PaymentStepProps {
@@ -19,15 +19,21 @@ interface PaymentStepProps {
   submitting: boolean;
 }
 
-const GCASH_NUMBER = getGcashNumber();
-const GCASH_NAME = getGcashName();
-
 const PaymentStep = ({ bookingData, onSubmit, onBack, submitting }: PaymentStepProps) => {
   const { toast } = useToast();
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [gcashName, setGcashName] = useState("Auxiliary Bar");
+  const [gcashNumber, setGcashNumber] = useState("0917 123 4567");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    getSettings(["gcash_name", "gcash_number"]).then((s) => {
+      if (s.gcash_name) setGcashName(s.gcash_name);
+      if (s.gcash_number) setGcashNumber(s.gcash_number);
+    });
+  }, []);
 
   const finalPrice = bookingData.isWeekday
     ? Math.round(bookingData.price * 0.5)
@@ -60,8 +66,6 @@ const PaymentStep = ({ bookingData, onSubmit, onBack, submitting }: PaymentStepP
 
     setUploading(true);
     try {
-      // Upload receipt to storage
-
       const ext = receiptFile.name.split(".").pop() || "jpg";
       const fileName = `receipt_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
 
@@ -136,11 +140,11 @@ const PaymentStep = ({ bookingData, onSubmit, onBack, submitting }: PaymentStepP
         <div className="space-y-2">
           <div className="flex justify-between font-body text-[12px]">
             <span className="text-white/50">Account Name</span>
-            <span className="text-white/80 font-semibold">{GCASH_NAME}</span>
+            <span className="text-white/80 font-semibold">{gcashName}</span>
           </div>
           <div className="flex justify-between font-body text-[12px]">
             <span className="text-white/50">GCash Number</span>
-            <span className="text-white/80 font-semibold">{GCASH_NUMBER}</span>
+            <span className="text-white/80 font-semibold">{gcashNumber}</span>
           </div>
           <div className="flex justify-between font-body text-[12px]">
             <span className="text-white/50">Amount</span>
