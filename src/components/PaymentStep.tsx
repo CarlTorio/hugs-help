@@ -59,8 +59,7 @@ const PaymentStep = ({ bookingData, onSubmit, onBack, submitting }: PaymentStepP
 
     setUploading(true);
     try {
-      // Ensure bucket exists (will fail silently if already exists)
-      await supabase.storage.createBucket("receipts", { public: true }).catch(() => {});
+      // Upload receipt to storage
 
       const ext = receiptFile.name.split(".").pop() || "jpg";
       const fileName = `receipt_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
