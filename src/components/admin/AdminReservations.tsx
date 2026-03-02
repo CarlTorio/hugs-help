@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight, Archive, Trash2 } from "lucide-react";
 import { format, startOfWeek, endOfWeek, isToday, parseISO } from "date-fns";
 import { Reservation, STATUS_COLORS, fromBookingRow } from "@/lib/reservations";
 import { useToast } from "@/hooks/use-toast";
@@ -77,6 +77,18 @@ const AdminReservations = () => {
     }
   };
 
+  const deleteReservation = async (id: string) => {
+    if (!confirm("Are you sure you want to permanently delete this reservation?")) return;
+    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Deleted", description: "Reservation permanently deleted." });
+      fetchReservations();
+      if (selectedReservation?.id === id) setSelectedReservation(null);
+    }
+  };
+
   const saveNotes = async () => {
     if (!selectedReservation) return;
     const { error } = await supabase.from("bookings").update({ notes: adminNotes }).eq("id", selectedReservation.id);
@@ -97,7 +109,7 @@ const AdminReservations = () => {
   const cellStyle: React.CSSProperties = { padding: "10px 14px", fontSize: 11, fontFamily: "Montserrat", fontWeight: 300, color: "rgba(240,235,227,0.8)", borderBottom: "1px solid rgba(139,0,0,0.1)", whiteSpace: "nowrap" };
   const headStyle: React.CSSProperties = { ...cellStyle, color: "#CC0000", fontWeight: 700, fontSize: 9, letterSpacing: "2px", textTransform: "uppercase" };
 
-  const statuses = ["all", "pending", "confirmed", "cancelled", "completed"];
+  const statuses = ["all", "pending", "confirmed", "cancelled", "completed", "archived"];
 
   return (
     <div>
@@ -199,7 +211,15 @@ const AdminReservations = () => {
                         {r.status === "confirmed" && (
                           <ActionBtn label="Complete" color="#0088CC" onClick={() => updateStatus(r.id, "completed")} />
                         )}
-                        <button onClick={() => openDetails(r)} className="p-1 rounded hover:bg-white/10 transition-colors">
+                        {r.status !== "archived" && (
+                          <button onClick={() => updateStatus(r.id, "archived")} className="p-1 rounded hover:bg-white/10 transition-colors" title="Archive">
+                            <Archive size={14} className="text-amber-500/60" />
+                          </button>
+                        )}
+                        <button onClick={() => deleteReservation(r.id)} className="p-1 rounded hover:bg-white/10 transition-colors" title="Delete">
+                          <Trash2 size={14} className="text-red-500/60" />
+                        </button>
+                        <button onClick={() => openDetails(r)} className="p-1 rounded hover:bg-white/10 transition-colors" title="View">
                           <Eye size={14} className="text-white/50" />
                         </button>
                       </div>
@@ -229,7 +249,7 @@ const AdminReservations = () => {
                   <p className="font-body text-[10px] text-white/40">Pax: <span className="text-white/70">{r.number_of_pax}</span></p>
                   <p className="font-body text-[10px] text-white/40">Table: <span className="text-white/70">{r.table_type}</span></p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {r.status === "pending" && (
                     <>
                       <ActionBtn label="Confirm" color="#00AA00" onClick={() => updateStatus(r.id, "confirmed")} />
@@ -239,6 +259,10 @@ const AdminReservations = () => {
                   {r.status === "confirmed" && (
                     <ActionBtn label="Complete" color="#0088CC" onClick={() => updateStatus(r.id, "completed")} />
                   )}
+                  {r.status !== "archived" && (
+                    <ActionBtn label="Archive" color="#D4A017" onClick={() => updateStatus(r.id, "archived")} />
+                  )}
+                  <ActionBtn label="Delete" color="#CC0000" onClick={() => deleteReservation(r.id)} />
                   <button onClick={() => openDetails(r)} className="font-body text-[9px] tracking-[1px] uppercase px-2 py-1 rounded-sm transition-colors" style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(240,235,227,0.6)" }}>
                     Details
                   </button>

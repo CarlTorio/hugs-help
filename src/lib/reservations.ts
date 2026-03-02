@@ -114,4 +114,5 @@ export const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   confirmed: { bg: "rgba(0,180,0,0.15)", text: "#00CC00" },
   cancelled: { bg: "rgba(204,0,0,0.15)", text: "#CC0000" },
   completed: { bg: "rgba(0,120,204,0.15)", text: "#0088CC" },
+  archived: { bg: "rgba(212,160,23,0.15)", text: "#D4A017" },
 };
