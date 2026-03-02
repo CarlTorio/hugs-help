@@ -83,19 +83,16 @@ const Admin = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 md:gap-6 mb-8 overflow-x-auto" style={{ borderBottom: "1px solid rgba(139,0,0,0.2)" }}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className="font-body font-bold text-[9px] md:text-[10px] tracking-[2px] md:tracking-[3px] uppercase pb-3 transition-colors duration-200 whitespace-nowrap"
+              className="font-body font-bold text-[10px] md:text-[11px] tracking-[2px] uppercase py-3 px-4 rounded-sm transition-all duration-200"
               style={{
-                color: activeTab === tab.key ? "#CC0000" : "rgba(240,235,227,0.5)",
-                background: "none",
-                border: "none",
-                borderBottomWidth: 2,
-                borderBottomStyle: "solid",
-                borderBottomColor: activeTab === tab.key ? "#CC0000" : "transparent",
+                color: activeTab === tab.key ? "#FFFFFF" : "rgba(240,235,227,0.5)",
+                background: activeTab === tab.key ? "rgba(139,0,0,0.4)" : "rgba(255,255,255,0.04)",
+                border: activeTab === tab.key ? "1px solid rgba(139,0,0,0.6)" : "1px solid rgba(139,0,0,0.15)",
               }}
             >
               {tab.label}

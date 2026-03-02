@@ -51,7 +51,11 @@ const AdminReservations = () => {
 
   const filtered = useMemo(() => {
     let list = reservations;
-    if (statusFilter !== "all") list = list.filter((r) => r.status === statusFilter);
+    if (statusFilter === "all") {
+      list = list.filter((r) => r.status === "pending" || r.status === "confirmed");
+    } else {
+      list = list.filter((r) => r.status === statusFilter);
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter((r) =>
