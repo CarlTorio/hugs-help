@@ -10,73 +10,25 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
-      bookings: {
+      settings: {
         Row: {
-          contact: string
-          created_at: string
-          date: string
-          guests: string
-          id: string
-          name: string
-          notes: string | null
-          occasion: string
-          status: string
-          time: string
+          key: string
+          updated_at: string
+          value: string
         }
         Insert: {
-          contact: string
-          created_at?: string
-          date: string
-          guests: string
-          id?: string
-          name: string
-          notes?: string | null
-          occasion: string
-          status?: string
-          time: string
+          key: string
+          updated_at?: string
+          value?: string
         }
         Update: {
-          contact?: string
-          created_at?: string
-          date?: string
-          guests?: string
-          id?: string
-          name?: string
-          notes?: string | null
-          occasion?: string
-          status?: string
-          time?: string
-        }
-        Relationships: []
-      }
-      events: {
-        Row: {
-          date_label: string
-          description: string
-          id: string
-          image_url: string | null
-          slot: number
-          title: string
-        }
-        Insert: {
-          date_label: string
-          description: string
-          id?: string
-          image_url?: string | null
-          slot: number
-          title: string
-        }
-        Update: {
-          date_label?: string
-          description?: string
-          id?: string
-          image_url?: string | null
-          slot?: number
-          title?: string
+          key?: string
+          updated_at?: string
+          value?: string
         }
         Relationships: []
       }

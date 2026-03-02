@@ -8,11 +8,15 @@ import AdminContactInfo from "@/components/admin/AdminContactInfo";
 import AdminSettings from "@/components/admin/AdminSettings";
 
 const ADMIN_PASSWORD = "AUXILIARY";
+const REMEMBER_KEY = "auxiliary_admin_remember";
 
 const Admin = () => {
   const navigate = useNavigate();
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(() => {
+    return localStorage.getItem(REMEMBER_KEY) === "true";
+  });
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(!!localStorage.getItem(REMEMBER_KEY));
   const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact" | "settings">("events");
 
@@ -21,6 +25,11 @@ const Admin = () => {
     if (password === ADMIN_PASSWORD) {
       setAuthenticated(true);
       setError(false);
+      if (rememberMe) {
+        localStorage.setItem(REMEMBER_KEY, "true");
+      } else {
+        localStorage.removeItem(REMEMBER_KEY);
+      }
     } else {
       setError(true);
     }
@@ -47,6 +56,15 @@ const Admin = () => {
             autoFocus
           />
           {error && <p className="font-body text-[11px]" style={{ color: "#CC0000" }}>Incorrect password</p>}
+          <label className="flex items-center gap-2 cursor-pointer self-start">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="accent-[#8B0000] w-4 h-4"
+            />
+            <span className="font-body text-[11px]" style={{ color: "rgba(240,235,227,0.6)" }}>Remember me</span>
+          </label>
           <button
             type="submit"
             className="w-full font-body font-bold text-[11px] tracking-[3px] uppercase py-3 transition-all duration-200"

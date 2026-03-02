@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Save } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
+import { getSettings, setSetting } from "@/lib/settings";
 
 export interface SiteInfo {
   address: string;
@@ -26,12 +27,31 @@ export const DEFAULT_SITE_INFO: SiteInfo = {
   directions_url: "https://share.google/JQiUAJQYR01e2kkXN",
 };
 
-export const getSiteInfo = (): SiteInfo => {
-  const stored = localStorage.getItem("site_info");
-  if (stored) {
-    try { return { ...DEFAULT_SITE_INFO, ...JSON.parse(stored) }; } catch { /* fallback */ }
+const SITE_KEYS: { key: keyof SiteInfo; dbKey: string }[] = [
+  { key: "address", dbKey: "site_address" },
+  { key: "address_sub", dbKey: "site_address_sub" },
+  { key: "contact", dbKey: "site_contact" },
+  { key: "instagram", dbKey: "site_instagram" },
+  { key: "instagram_url", dbKey: "site_instagram_url" },
+  { key: "facebook", dbKey: "site_facebook" },
+  { key: "facebook_url", dbKey: "site_facebook_url" },
+  { key: "hours", dbKey: "site_hours" },
+  { key: "directions_url", dbKey: "site_directions_url" },
+];
+
+// Fetch site info from database
+export const getSiteInfo = async (): Promise<SiteInfo> => {
+  try {
+    const dbKeys = SITE_KEYS.map((k) => k.dbKey);
+    const settings = await getSettings(dbKeys);
+    const info: SiteInfo = { ...DEFAULT_SITE_INFO };
+    for (const { key, dbKey } of SITE_KEYS) {
+      if (settings[dbKey]) info[key] = settings[dbKey];
+    }
+    return info;
+  } catch {
+    return DEFAULT_SITE_INFO;
   }
-  return DEFAULT_SITE_INFO;
 };
 
 const FIELDS: { key: keyof SiteInfo; label: string }[] = [
@@ -49,18 +69,35 @@ const FIELDS: { key: keyof SiteInfo; label: string }[] = [
 const AdminContactInfo = () => {
   const { toast } = useToast();
   const [info, setInfo] = useState<SiteInfo>(DEFAULT_SITE_INFO);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setInfo(getSiteInfo());
+    const load = async () => {
+      setLoading(true);
+      const data = await getSiteInfo();
+      setInfo(data);
+      setLoading(false);
+    };
+    load();
   }, []);
 
   const handleChange = (key: keyof SiteInfo, value: string) => {
     setInfo((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSave = () => {
-    localStorage.setItem("site_info", JSON.stringify(info));
-    toast({ title: "Contact info saved!" });
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await Promise.all(
+        SITE_KEYS.map(({ key, dbKey }) => setSetting(dbKey, info[key]))
+      );
+      toast({ title: "Contact info saved!" });
+    } catch {
+      toast({ title: "Error saving contact info", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inputStyle: React.CSSProperties = {
@@ -86,6 +123,14 @@ const AdminContactInfo = () => {
     display: "block",
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-white/40 font-body text-[12px]">
+        <Loader2 size={14} className="animate-spin" /> Loading contact info…
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl">
       <div className="space-y-4">
@@ -102,11 +147,12 @@ const AdminContactInfo = () => {
       </div>
       <button
         onClick={handleSave}
-        className="mt-6 flex items-center justify-center gap-2 font-body font-bold text-[10px] tracking-[2px] uppercase px-8 py-2.5 transition-all duration-200"
+        disabled={saving}
+        className="mt-6 flex items-center justify-center gap-2 font-body font-bold text-[10px] tracking-[2px] uppercase px-8 py-2.5 transition-all duration-200 disabled:opacity-50"
         style={{ background: "#8B0000", color: "#FFFFFF" }}
       >
-        <Save size={14} />
-        SAVE CHANGES
+        {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+        {saving ? "SAVING..." : "SAVE CHANGES"}
       </button>
     </div>
   );
