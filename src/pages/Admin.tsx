@@ -5,6 +5,7 @@ import AdminEventEditor from "@/components/admin/AdminEventEditor";
 import AdminReservations from "@/components/admin/AdminReservations";
 import AdminZonePhotos from "@/components/admin/AdminZonePhotos";
 import AdminContactInfo from "@/components/admin/AdminContactInfo";
+import AdminSettings from "@/components/admin/AdminSettings";
 
 const ADMIN_PASSWORD = "AUXILIARY";
 
@@ -13,7 +14,7 @@ const Admin = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact">("events");
+  const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact" | "settings">("events");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +64,7 @@ const Admin = () => {
     { key: "reservations" as const, label: "RESERVATIONS" },
     { key: "zone" as const, label: "ZONE PHOTOS" },
     { key: "contact" as const, label: "CONTACT INFO" },
+    { key: "settings" as const, label: "SETTINGS" },
   ];
 
   return (
@@ -83,7 +85,7 @@ const Admin = () => {
         </div>
 
         {/* Tabs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
           {tabs.map((tab) => (
             <button
               key={tab.key}
@@ -104,6 +106,8 @@ const Admin = () => {
         {activeTab === "reservations" && <AdminReservations />}
         {activeTab === "zone" && <AdminZonePhotos />}
         {activeTab === "contact" && <AdminContactInfo />}
+        {activeTab === "settings" && <AdminSettings />}
+
       </div>
     </div>
   );
