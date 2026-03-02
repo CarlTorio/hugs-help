@@ -1,4 +1,4 @@
-// Reservation types and helpers
+// Reservation types and helpers — mapped to bookings table
 
 export interface Reservation {
   id: string;
@@ -13,6 +13,49 @@ export interface Reservation {
   status: string;
   admin_notes: string | null;
   created_at: string;
+}
+
+// Maps form data to bookings table columns
+export function toBookingInsert(data: {
+  full_name: string;
+  email: string;
+  contact_number: string;
+  number_of_pax: number;
+  date_of_visit: string;
+  time_of_arrival: string;
+  table_type: string;
+  special_requests: string | null;
+}) {
+  return {
+    name: data.full_name,
+    contact: `${data.contact_number} | ${data.email}`,
+    date: data.date_of_visit,
+    time: data.time_of_arrival,
+    guests: String(data.number_of_pax),
+    occasion: data.table_type,
+    notes: data.special_requests || "",
+  };
+}
+
+// Maps bookings table row back to Reservation shape
+export function fromBookingRow(row: any): Reservation {
+  const contactParts = (row.contact || "").split(" | ");
+  const contactNumber = contactParts[0] || "";
+  const email = contactParts[1] || "";
+  return {
+    id: row.id,
+    full_name: row.name,
+    email,
+    contact_number: contactNumber,
+    number_of_pax: parseInt(row.guests) || 0,
+    date_of_visit: row.date,
+    time_of_arrival: row.time,
+    table_type: row.occasion,
+    special_requests: row.notes || null,
+    status: row.status,
+    admin_notes: null,
+    created_at: row.created_at,
+  };
 }
 
 export type ReservationInsert = Omit<Reservation, "id" | "status" | "admin_notes" | "created_at">;

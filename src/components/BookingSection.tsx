@@ -14,7 +14,7 @@ import {
   isWeekend,
   validatePaxForTable,
   formatPeso,
-  type ReservationInsert,
+  toBookingInsert,
 } from "@/lib/reservations";
 
 const BookingSection = () => {
@@ -87,7 +87,7 @@ const BookingSection = () => {
     setSubmitting(true);
     try {
       const dateToSubmit = actualDate || form.date_of_visit!;
-      const data: ReservationInsert = {
+      const bookingData = toBookingInsert({
         full_name: form.full_name.trim(),
         email: form.email.trim(),
         contact_number: form.contact_number.trim(),
@@ -96,9 +96,9 @@ const BookingSection = () => {
         time_of_arrival: form.time_of_arrival,
         table_type: TABLE_TYPES.find((t) => t.value === form.table_type)?.label || form.table_type,
         special_requests: form.special_requests.trim() || null,
-      };
+      });
 
-      const { error } = await supabase.from("reservations" as any).insert(data as any);
+      const { error } = await supabase.from("bookings").insert(bookingData);
       if (error) throw error;
 
       setShowSuccess(true);
