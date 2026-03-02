@@ -6,7 +6,7 @@ const LocationSection = () => {
   const [siteInfo, setSiteInfo] = useState<SiteInfo | null>(null);
 
   useEffect(() => {
-    setSiteInfo(getSiteInfo());
+    getSiteInfo().then(setSiteInfo);
   }, []);
 
   if (!siteInfo) return null;
