@@ -326,17 +326,54 @@ const BookingSection = () => {
         </p>
       </div>
 
-      {/* Success Modal */}
+      {/* Success / Confirmation Step */}
       <AnimatePresence>
         {showSuccess && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 px-4" onClick={() => setShowSuccess(false)}>
-            <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }} className="bg-[#0F0000] border border-white/10 rounded-lg p-8 max-w-md text-center" onClick={(e) => e.stopPropagation()}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-4 overflow-y-auto py-10">
+            <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }} className="bg-[#0F0000] border border-white/10 rounded-lg p-8 max-w-md w-full text-center" onClick={(e) => e.stopPropagation()}>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }}>
                 <CheckCircle2 className="w-14 h-14 mx-auto mb-4 text-green-500" />
               </motion.div>
               <h3 className="font-display text-2xl text-white mb-2">Reservation Submitted!</h3>
-              <p className="font-body text-[13px] text-white/50 mb-6">Payment receipt received. Check your email for confirmation. See you at Auxiliary!</p>
-              <button onClick={() => setShowSuccess(false)} className="font-body font-bold text-[11px] tracking-[2px] uppercase px-8 py-3 rounded-full transition-all duration-200 text-white" style={{ background: "#8B0000" }}>CLOSE</button>
+              <p className="font-body text-[13px] text-white/50 mb-5">
+                Your payment receipt has been received. Your reservation is now being reviewed.
+              </p>
+
+              {/* Reminder box */}
+              <div className="p-4 rounded-sm border border-[#CC0000]/15 mb-5 text-left" style={{ background: "rgba(139,0,0,0.06)" }}>
+                <p className="font-body font-bold text-[9px] tracking-[2px] uppercase text-[#CC0000] mb-2">📌 IMPORTANT REMINDER</p>
+                <p className="font-body text-[11px] text-white/60 leading-relaxed">
+                  To speed up your confirmation, please send us a message on <span className="text-white/80 font-semibold">Messenger</span> letting us know that you've paid and reserved. You can also call us directly.
+                </p>
+              </div>
+
+              {/* Messenger Button */}
+              <a
+                href="https://www.messenger.com/t/100005803967842/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full mb-3 transition-all duration-200 text-white"
+                style={{ background: "#0084FF" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#0099FF"; e.currentTarget.style.boxShadow = "0 0 25px rgba(0,132,255,0.3)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#0084FF"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                💬 MESSAGE US ON MESSENGER
+              </a>
+
+              {/* Call Button */}
+              <a
+                href="tel:09510815806"
+                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full mb-5 transition-all duration-200 text-white"
+                style={{ background: "#2D7D2D" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#38A038"; e.currentTarget.style.boxShadow = "0 0 25px rgba(45,125,45,0.3)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#2D7D2D"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                📞 CALL 0951 081 5806
+              </a>
+
+              <button onClick={() => setShowSuccess(false)} className="font-body text-[11px] tracking-[1px] uppercase text-white/40 hover:text-white/70 transition-colors underline">
+                Close
+              </button>
             </motion.div>
           </motion.div>
         )}
