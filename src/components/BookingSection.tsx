@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { format, addDays } from "date-fns";
-import { CalendarIcon, AlertTriangle, CheckCircle2, Clock, Users, ChevronDown } from "lucide-react";
+import { CalendarIcon, AlertTriangle, CheckCircle2, Clock, Users, ChevronDown, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -18,8 +19,10 @@ import {
 import PaymentStep from "@/components/PaymentStep";
 
 const BookingSection = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
-  const [step, setStep] = useState<"form" | "payment">("form");
+  const [step, setStep] = useState<"form" | "payment" | "success">("form");
+  const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({
     full_name: "",
     email: "",
@@ -32,7 +35,6 @@ const BookingSection = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const actualDate = useMemo(() => {
@@ -87,7 +89,6 @@ const BookingSection = () => {
     e.preventDefault();
     if (!validate()) return;
     setStep("payment");
-    // Scroll to top of section
     document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -110,10 +111,8 @@ const BookingSection = () => {
       const { error } = await (supabase.from as any)("bookings").insert(bookingData);
       if (error) throw error;
 
-      setShowSuccess(true);
-      setStep("form");
-      setForm({ full_name: "", email: "", contact_number: "", number_of_pax: "", date_of_visit: undefined, time_of_arrival: "", table_type: "", special_requests: "" });
-      setErrors({});
+      setStep("success");
+      document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Failed to submit reservation.", variant: "destructive" });
     } finally {
@@ -150,18 +149,94 @@ const BookingSection = () => {
         {/* Step Indicator */}
         <div className="flex items-center justify-center gap-4 mb-8">
           <div className="flex items-center gap-2">
-            <div className={cn("w-7 h-7 rounded-full flex items-center justify-center font-body text-[11px] font-bold", step === "form" ? "bg-[#8B0000] text-white" : "bg-white/10 text-white/40")}>1</div>
+            <div className={cn("w-7 h-7 rounded-full flex items-center justify-center font-body text-[11px] font-bold", step === "form" ? "bg-[#8B0000] text-white" : "bg-green-700 text-white")}>1</div>
             <span className={cn("font-body text-[10px] tracking-[1px] uppercase", step === "form" ? "text-white/80" : "text-white/30")}>Details</span>
           </div>
           <div className="w-8 h-[1px] bg-white/10" />
           <div className="flex items-center gap-2">
-            <div className={cn("w-7 h-7 rounded-full flex items-center justify-center font-body text-[11px] font-bold", step === "payment" ? "bg-[#8B0000] text-white" : "bg-white/10 text-white/40")}>2</div>
+            <div className={cn("w-7 h-7 rounded-full flex items-center justify-center font-body text-[11px] font-bold", step === "payment" ? "bg-[#8B0000] text-white" : step === "success" ? "bg-green-700 text-white" : "bg-white/10 text-white/40")}>2</div>
             <span className={cn("font-body text-[10px] tracking-[1px] uppercase", step === "payment" ? "text-white/80" : "text-white/30")}>Payment</span>
+          </div>
+          <div className="w-8 h-[1px] bg-white/10" />
+          <div className="flex items-center gap-2">
+            <div className={cn("w-7 h-7 rounded-full flex items-center justify-center font-body text-[11px] font-bold", step === "success" ? "bg-[#8B0000] text-white" : "bg-white/10 text-white/40")}>3</div>
+            <span className={cn("font-body text-[10px] tracking-[1px] uppercase", step === "success" ? "text-white/80" : "text-white/30")}>Done</span>
           </div>
         </div>
 
         <AnimatePresence mode="wait">
-          {step === "form" ? (
+          {step === "success" ? (
+            <motion.div key="success" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} className="space-y-6">
+              <div className="text-center">
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }}>
+                  <CheckCircle2 className="w-14 h-14 mx-auto mb-4 text-green-500" />
+                </motion.div>
+                <h3 className="font-display text-2xl text-white mb-2">Reservation Submitted!</h3>
+                <p className="font-body text-[13px] text-white/50 mb-5">
+                  Your payment receipt has been received. Your reservation is now being reviewed.
+                </p>
+              </div>
+
+              {/* Reminder box */}
+              <div className="p-4 rounded-sm border border-[#CC0000]/15 text-left" style={{ background: "rgba(139,0,0,0.06)" }}>
+                <p className="font-body font-bold text-[9px] tracking-[2px] uppercase text-[#CC0000] mb-2">📌 IMPORTANT REMINDER</p>
+                <p className="font-body text-[11px] text-white/60 leading-relaxed">
+                  To speed up your confirmation, please send us a message on <span className="text-white/80 font-semibold">Messenger</span> letting us know that you've paid and reserved. You can also call us directly.
+                </p>
+              </div>
+
+              {/* Contact number with copy */}
+              <div className="flex items-center justify-between p-3 rounded-sm border border-white/10" style={{ background: "rgba(255,255,255,0.03)" }}>
+                <div>
+                  <p className="font-body text-[9px] tracking-[2px] uppercase text-white/40">Contact Number</p>
+                  <p className="font-body text-[14px] text-white font-semibold">0951 081 5806</p>
+                </div>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText("09510815806");
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="flex items-center gap-1.5 font-body text-[9px] tracking-[1px] uppercase px-3 py-2 rounded-sm transition-all duration-200"
+                  style={{ background: copied ? "rgba(45,125,45,0.2)" : "rgba(255,255,255,0.06)", color: copied ? "#4ade80" : "rgba(240,235,227,0.6)", border: copied ? "1px solid rgba(45,125,45,0.4)" : "1px solid rgba(255,255,255,0.1)" }}
+                >
+                  {copied ? <><Check size={12} /> Copied</> : <><Copy size={12} /> Copy</>}
+                </button>
+              </div>
+
+              {/* Messenger Button */}
+              <a
+                href="https://www.messenger.com/t/100005803967842/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full transition-all duration-200 text-white"
+                style={{ background: "#0084FF" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#0099FF"; e.currentTarget.style.boxShadow = "0 0 25px rgba(0,132,255,0.3)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#0084FF"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                💬 MESSAGE US ON MESSENGER
+              </a>
+
+              {/* Call Button */}
+              <a
+                href="tel:09510815806"
+                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full transition-all duration-200 text-white"
+                style={{ background: "#2D7D2D" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#38A038"; e.currentTarget.style.boxShadow = "0 0 25px rgba(45,125,45,0.3)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#2D7D2D"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                📞 CALL 0951 081 5806
+              </a>
+
+              {/* Close → Home */}
+              <button
+                onClick={() => navigate("/")}
+                className="w-full font-body text-[11px] tracking-[1px] uppercase text-white/40 hover:text-white/70 transition-colors py-3"
+              >
+                Close
+              </button>
+            </motion.div>
+          ) : step === "form" ? (
             <motion.div key="form" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}>
               <form onSubmit={handleProceedToPayment} className="space-y-5 md:space-y-6">
                 {/* Full Name & Email */}
@@ -321,63 +396,12 @@ const BookingSection = () => {
           )}
         </AnimatePresence>
 
-        <p className="text-center mt-5 font-body font-light text-[11px] text-white/30">
-          Your reservation will be reviewed and confirmed via email.
-        </p>
-      </div>
-
-      {/* Success / Confirmation Step */}
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-4 overflow-y-auto py-10">
-            <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }} className="bg-[#0F0000] border border-white/10 rounded-lg p-8 max-w-md w-full text-center" onClick={(e) => e.stopPropagation()}>
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }}>
-                <CheckCircle2 className="w-14 h-14 mx-auto mb-4 text-green-500" />
-              </motion.div>
-              <h3 className="font-display text-2xl text-white mb-2">Reservation Submitted!</h3>
-              <p className="font-body text-[13px] text-white/50 mb-5">
-                Your payment receipt has been received. Your reservation is now being reviewed.
-              </p>
-
-              {/* Reminder box */}
-              <div className="p-4 rounded-sm border border-[#CC0000]/15 mb-5 text-left" style={{ background: "rgba(139,0,0,0.06)" }}>
-                <p className="font-body font-bold text-[9px] tracking-[2px] uppercase text-[#CC0000] mb-2">📌 IMPORTANT REMINDER</p>
-                <p className="font-body text-[11px] text-white/60 leading-relaxed">
-                  To speed up your confirmation, please send us a message on <span className="text-white/80 font-semibold">Messenger</span> letting us know that you've paid and reserved. You can also call us directly.
-                </p>
-              </div>
-
-              {/* Messenger Button */}
-              <a
-                href="https://www.messenger.com/t/100005803967842/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full mb-3 transition-all duration-200 text-white"
-                style={{ background: "#0084FF" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#0099FF"; e.currentTarget.style.boxShadow = "0 0 25px rgba(0,132,255,0.3)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "#0084FF"; e.currentTarget.style.boxShadow = "none"; }}
-              >
-                💬 MESSAGE US ON MESSENGER
-              </a>
-
-              {/* Call Button */}
-              <a
-                href="tel:09510815806"
-                className="w-full flex items-center justify-center gap-2 font-body font-bold text-[11px] tracking-[2px] uppercase py-3.5 rounded-full mb-5 transition-all duration-200 text-white"
-                style={{ background: "#2D7D2D" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#38A038"; e.currentTarget.style.boxShadow = "0 0 25px rgba(45,125,45,0.3)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "#2D7D2D"; e.currentTarget.style.boxShadow = "none"; }}
-              >
-                📞 CALL 0951 081 5806
-              </a>
-
-              <button onClick={() => setShowSuccess(false)} className="font-body text-[11px] tracking-[1px] uppercase text-white/40 hover:text-white/70 transition-colors underline">
-                Close
-              </button>
-            </motion.div>
-          </motion.div>
+        {step !== "success" && (
+          <p className="text-center mt-5 font-body font-light text-[11px] text-white/30">
+            Your reservation will be reviewed and confirmed via email.
+          </p>
         )}
-      </AnimatePresence>
+      </div>
     </section>
   );
 };

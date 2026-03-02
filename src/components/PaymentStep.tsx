@@ -4,6 +4,7 @@ import { Upload, CheckCircle2, ArrowLeft, Loader2, ImageIcon } from "lucide-reac
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatPeso } from "@/lib/reservations";
+import { getGcashNumber, getGcashName } from "@/components/admin/AdminSettings";
 import gcashLogo from "@/assets/gcash-logo.png";
 
 interface PaymentStepProps {
@@ -18,8 +19,8 @@ interface PaymentStepProps {
   submitting: boolean;
 }
 
-const GCASH_NUMBER = "0917 123 4567"; // Replace with actual GCash number
-const GCASH_NAME = "Auxiliary Bar";
+const GCASH_NUMBER = getGcashNumber();
+const GCASH_NAME = getGcashName();
 
 const PaymentStep = ({ bookingData, onSubmit, onBack, submitting }: PaymentStepProps) => {
   const { toast } = useToast();
