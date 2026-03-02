@@ -10,10 +10,14 @@ export interface Reservation {
   time_of_arrival: string;
   table_type: string;
   special_requests: string | null;
+  receipt_url: string | null;
   status: string;
   admin_notes: string | null;
   created_at: string;
 }
+
+// Separator for receipt URL in notes field
+const RECEIPT_SEPARATOR = "|||RECEIPT|||";
 
 // Maps form data to bookings table columns
 export function toBookingInsert(data: {
@@ -25,7 +29,12 @@ export function toBookingInsert(data: {
   time_of_arrival: string;
   table_type: string;
   special_requests: string | null;
+  receipt_url?: string | null;
 }) {
+  let notes = data.special_requests || "";
+  if (data.receipt_url) {
+    notes = notes + RECEIPT_SEPARATOR + data.receipt_url;
+  }
   return {
     name: data.full_name,
     contact: `${data.contact_number} | ${data.email}`,
@@ -33,8 +42,21 @@ export function toBookingInsert(data: {
     time: data.time_of_arrival,
     guests: String(data.number_of_pax),
     occasion: data.table_type,
-    notes: data.special_requests || "",
+    notes,
   };
+}
+
+// Extract receipt URL from notes
+export function extractReceiptUrl(notes: string | null): string | null {
+  if (!notes || !notes.includes(RECEIPT_SEPARATOR)) return null;
+  return notes.split(RECEIPT_SEPARATOR)[1] || null;
+}
+
+// Extract clean notes (without receipt URL)
+export function extractCleanNotes(notes: string | null): string | null {
+  if (!notes) return null;
+  const clean = notes.split(RECEIPT_SEPARATOR)[0].trim();
+  return clean || null;
 }
 
 // Maps bookings table row back to Reservation shape
@@ -51,7 +73,8 @@ export function fromBookingRow(row: any): Reservation {
     date_of_visit: row.date,
     time_of_arrival: row.time,
     table_type: row.occasion,
-    special_requests: row.notes || null,
+    special_requests: extractCleanNotes(row.notes),
+    receipt_url: extractReceiptUrl(row.notes),
     status: row.status,
     admin_notes: null,
     created_at: row.created_at,
