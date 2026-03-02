@@ -32,6 +32,7 @@ const BookingSection = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Compute actual date (shifts +1 day if 12AM-5AM selected)
   const actualDate = useMemo(() => {
@@ -178,7 +179,7 @@ const BookingSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
             <div>
               <label className={labelClass}>Date of Visit</label>
-              <Popover>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
                   <button type="button" className={cn(inputClass("date_of_visit"), "flex items-center justify-between text-left", !form.date_of_visit && "text-white/25")}>
                     {form.date_of_visit ? format(form.date_of_visit, "MMMM d, yyyy") : "Pick a date"}
@@ -192,6 +193,7 @@ const BookingSection = () => {
                     onSelect={(d) => {
                       setForm((p) => ({ ...p, date_of_visit: d, time_of_arrival: "" }));
                       if (d) setErrors((p) => { const n = { ...p }; delete n.date_of_visit; return n; });
+                      setCalendarOpen(false);
                     }}
                     disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
                     initialFocus
