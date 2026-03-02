@@ -137,6 +137,29 @@ const BookingSection = () => {
       const { error } = await (supabase.from as any)("bookings").insert(bookingData);
       if (error) throw error;
 
+      // Send email notification (fire-and-forget, don't block success)
+      try {
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        await fetch(`https://${projectId}.supabase.co/functions/v1/send-booking-notification`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            booking: {
+              full_name: form.full_name.trim(),
+              email: form.email.trim(),
+              contact_number: form.contact_number.trim(),
+              number_of_pax: parseInt(form.number_of_pax),
+              date_of_visit: format(dateToSubmit, "MMMM d, yyyy"),
+              time_of_arrival: form.time_of_arrival,
+              table_type: dynamicTableTypes.find((t) => t.value === form.table_type)?.label || form.table_type,
+              special_requests: form.special_requests.trim() || null,
+            },
+          }),
+        });
+      } catch (notifErr) {
+        console.warn("Booking notification email failed:", notifErr);
+      }
+
       setStep("success");
       document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: any) {
