@@ -107,7 +107,7 @@ const BookingSection = () => {
         receipt_url: receiptUrl,
       });
 
-      const { error } = await supabase.from("bookings").insert(bookingData);
+      const { error } = await (supabase.from as any)("bookings").insert(bookingData);
       if (error) throw error;
 
       setShowSuccess(true);

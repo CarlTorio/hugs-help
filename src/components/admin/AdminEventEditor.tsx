@@ -19,7 +19,7 @@ const AdminEventEditor = () => {
   const [saving, setSaving] = useState<number | null>(null);
 
   const fetchEvents = async () => {
-    const { data, error } = await supabase.from("events").select("*").order("slot", { ascending: true });
+    const { data, error } = await (supabase.from as any)("events").select("*").order("slot", { ascending: true });
     if (!error && data) setEvents(data as EventSlot[]);
     setLoading(false);
   };
@@ -58,7 +58,7 @@ const AdminEventEditor = () => {
 
     handleChange(slot, "image_url", "");
     // Save immediately
-    await supabase.from("events").update({ image_url: null }).eq("slot", slot);
+    await (supabase.from as any)("events").update({ image_url: null }).eq("slot", slot);
     toast({ title: "Image deleted" });
   };
 
@@ -67,7 +67,7 @@ const AdminEventEditor = () => {
     const ev = events.find((e) => e.slot === slot);
     if (!ev) return;
 
-    const { error } = await supabase.from("events").update({
+    const { error } = await (supabase.from as any)("events").update({
       image_url: ev.image_url || null,
       date_label: ev.date_label,
       title: ev.title,
