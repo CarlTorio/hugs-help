@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight, Archive, Trash2 } from "lucide-react";
+import { RefreshCw, Search, Eye, ChevronLeft, ChevronRight, Archive, Trash2, Receipt, ExternalLink } from "lucide-react";
 import { format, startOfWeek, endOfWeek, isToday, parseISO } from "date-fns";
 import { Reservation, STATUS_COLORS, fromBookingRow } from "@/lib/reservations";
 import { useToast } from "@/hooks/use-toast";
@@ -186,6 +186,7 @@ const AdminReservations = () => {
                   <th style={headStyle}>Contact</th>
                   <th style={headStyle}>Pax</th>
                   <th style={headStyle}>Table</th>
+                  <th style={headStyle}>Receipt</th>
                   <th style={headStyle}>Status</th>
                   <th style={headStyle}>Actions</th>
                 </tr>
@@ -199,6 +200,15 @@ const AdminReservations = () => {
                     <td style={cellStyle}>{r.contact_number}</td>
                     <td style={cellStyle}>{r.number_of_pax}</td>
                     <td style={{ ...cellStyle, whiteSpace: "normal", maxWidth: 160, fontSize: 10 }}>{r.table_type}</td>
+                    <td style={cellStyle}>
+                      {r.receipt_url ? (
+                        <a href={r.receipt_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-green-500/80 hover:text-green-400 transition-colors">
+                          <Receipt size={12} /> <span className="text-[9px] uppercase tracking-[1px]">View</span>
+                        </a>
+                      ) : (
+                        <span className="text-white/20 text-[9px]">None</span>
+                      )}
+                    </td>
                     <td style={cellStyle}>
                       <span className="font-body font-bold text-[9px] tracking-[1px] uppercase px-2 py-1 rounded-sm" style={{ background: STATUS_COLORS[r.status]?.bg, color: STATUS_COLORS[r.status]?.text }}>
                         {r.status}
@@ -251,7 +261,14 @@ const AdminReservations = () => {
                   <p className="font-body text-[10px] text-white/40">Date: <span className="text-white/70">{format(parseISO(r.date_of_visit), "MMM d, yyyy")}</span></p>
                   <p className="font-body text-[10px] text-white/40">Time: <span className="text-white/70">{r.time_of_arrival}</span></p>
                   <p className="font-body text-[10px] text-white/40">Pax: <span className="text-white/70">{r.number_of_pax}</span></p>
-                  <p className="font-body text-[10px] text-white/40">Table: <span className="text-white/70">{r.table_type}</span></p>
+                   <p className="font-body text-[10px] text-white/40">Table: <span className="text-white/70">{r.table_type}</span></p>
+                  {r.receipt_url && (
+                    <p className="font-body text-[10px] col-span-2">
+                      <a href={r.receipt_url} target="_blank" rel="noopener noreferrer" className="text-green-500/70 hover:text-green-400 flex items-center gap-1">
+                        <Receipt size={10} /> View Receipt
+                      </a>
+                    </p>
+                  )}
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {r.status === "pending" && (
@@ -314,7 +331,19 @@ const AdminReservations = () => {
                     <p className="font-body text-[12px] text-white/80">{value}</p>
                   </div>
                 ))}
-              </div>
+               </div>
+              {/* Receipt */}
+              {selectedReservation.receipt_url && (
+                <div>
+                  <p className="font-body text-[9px] tracking-[2px] uppercase text-white/40 mb-2">GCash Receipt</p>
+                  <a href={selectedReservation.receipt_url} target="_blank" rel="noopener noreferrer" className="block">
+                    <img src={selectedReservation.receipt_url} alt="Payment receipt" className="max-h-[200px] object-contain rounded border border-white/10" />
+                  </a>
+                  <a href={selectedReservation.receipt_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 mt-1 font-body text-[10px] text-blue-400/80 hover:text-blue-400">
+                    <ExternalLink size={10} /> Open full image
+                  </a>
+                </div>
+              )}
               {selectedReservation.special_requests && (
                 <div>
                   <p className="font-body text-[9px] tracking-[2px] uppercase text-white/40">Special Requests</p>
