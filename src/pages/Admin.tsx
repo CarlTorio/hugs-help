@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import AdminEventEditor from "@/components/admin/AdminEventEditor";
-import AdminBookings from "@/components/admin/AdminBookings";
+import AdminReservations from "@/components/admin/AdminReservations";
 import AdminZonePhotos from "@/components/admin/AdminZonePhotos";
 import AdminContactInfo from "@/components/admin/AdminContactInfo";
 
@@ -13,7 +13,7 @@ const Admin = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [activeTab, setActiveTab] = useState<"events" | "bookings" | "zone" | "contact">("events");
+  const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact">("events");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ const Admin = () => {
 
   const tabs = [
     { key: "events" as const, label: "EVENT CARDS" },
-    { key: "bookings" as const, label: "BOOKINGS" },
+    { key: "reservations" as const, label: "RESERVATIONS" },
     { key: "zone" as const, label: "ZONE PHOTOS" },
     { key: "contact" as const, label: "CONTACT INFO" },
   ];
@@ -104,7 +104,7 @@ const Admin = () => {
         </div>
 
         {activeTab === "events" && <AdminEventEditor />}
-        {activeTab === "bookings" && <AdminBookings />}
+        {activeTab === "reservations" && <AdminReservations />}
         {activeTab === "zone" && <AdminZonePhotos />}
         {activeTab === "contact" && <AdminContactInfo />}
       </div>
