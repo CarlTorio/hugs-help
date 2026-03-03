@@ -12,10 +12,8 @@ import LocationSection from "@/components/LocationSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  const alreadyLoaded = sessionStorage.getItem("aux_loaded") === "true";
-  const [loaded, setLoaded] = useState(alreadyLoaded);
+  const [loaded, setLoaded] = useState(false);
   const handleComplete = useCallback(() => {
-    sessionStorage.setItem("aux_loaded", "true");
     setLoaded(true);
   }, []);
 
