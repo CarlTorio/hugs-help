@@ -27,7 +27,7 @@ const AdminReservations = () => {
     setLoading(true);
     const { data, error } = await (supabase.from as any)("bookings")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("date_of_visit", { ascending: true });
     if (!error && data) setReservations(data.map(fromBookingRow));
     setLoading(false);
   };
