@@ -16,10 +16,7 @@ export interface Reservation {
   created_at: string;
 }
 
-// Separator for receipt URL in notes field
-const RECEIPT_SEPARATOR = "|||RECEIPT|||";
-
-// Maps form data to bookings table columns
+// Maps form data to bookings table columns (direct match)
 export function toBookingInsert(data: {
   full_name: string;
   email: string;
@@ -31,52 +28,34 @@ export function toBookingInsert(data: {
   special_requests: string | null;
   receipt_url?: string | null;
 }) {
-  let notes = data.special_requests || "";
-  if (data.receipt_url) {
-    notes = notes + RECEIPT_SEPARATOR + data.receipt_url;
-  }
   return {
-    name: data.full_name,
-    contact: `${data.contact_number} | ${data.email}`,
-    date: data.date_of_visit,
-    time: data.time_of_arrival,
-    guests: String(data.number_of_pax),
-    occasion: data.table_type,
-    notes,
+    full_name: data.full_name,
+    email: data.email,
+    contact_number: data.contact_number,
+    number_of_pax: data.number_of_pax,
+    date_of_visit: data.date_of_visit,
+    time_of_arrival: data.time_of_arrival,
+    table_type: data.table_type,
+    special_requests: data.special_requests,
+    receipt_url: data.receipt_url || null,
   };
 }
 
-// Extract receipt URL from notes
-export function extractReceiptUrl(notes: string | null): string | null {
-  if (!notes || !notes.includes(RECEIPT_SEPARATOR)) return null;
-  return notes.split(RECEIPT_SEPARATOR)[1] || null;
-}
-
-// Extract clean notes (without receipt URL)
-export function extractCleanNotes(notes: string | null): string | null {
-  if (!notes) return null;
-  const clean = notes.split(RECEIPT_SEPARATOR)[0].trim();
-  return clean || null;
-}
-
-// Maps bookings table row back to Reservation shape
+// Maps bookings table row back to Reservation shape (direct match)
 export function fromBookingRow(row: any): Reservation {
-  const contactParts = (row.contact || "").split(" | ");
-  const contactNumber = contactParts[0] || "";
-  const email = contactParts[1] || "";
   return {
     id: row.id,
-    full_name: row.name,
-    email,
-    contact_number: contactNumber,
-    number_of_pax: parseInt(row.guests) || 0,
-    date_of_visit: row.date,
-    time_of_arrival: row.time,
-    table_type: row.occasion,
-    special_requests: extractCleanNotes(row.notes),
-    receipt_url: extractReceiptUrl(row.notes),
+    full_name: row.full_name,
+    email: row.email,
+    contact_number: row.contact_number,
+    number_of_pax: row.number_of_pax,
+    date_of_visit: row.date_of_visit,
+    time_of_arrival: row.time_of_arrival,
+    table_type: row.table_type,
+    special_requests: row.special_requests,
+    receipt_url: row.receipt_url,
     status: row.status,
-    admin_notes: null,
+    admin_notes: row.admin_notes,
     created_at: row.created_at,
   };
 }
