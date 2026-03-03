@@ -14,7 +14,11 @@ serve(async (req) => {
   try {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY is not configured");
+      console.warn("RESEND_API_KEY is not configured — skipping email notification");
+      return new Response(JSON.stringify({ success: true, skipped: true, reason: "RESEND_API_KEY not configured" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const { booking } = await req.json();
