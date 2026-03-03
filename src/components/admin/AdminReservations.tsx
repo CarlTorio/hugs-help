@@ -94,7 +94,7 @@ const AdminReservations = () => {
 
   const saveNotes = async () => {
     if (!selectedReservation) return;
-    const { error } = await (supabase.from as any)("bookings").update({ notes: adminNotes }).eq("id", selectedReservation.id);
+    const { error } = await (supabase.from as any)("bookings").update({ admin_notes: adminNotes }).eq("id", selectedReservation.id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {

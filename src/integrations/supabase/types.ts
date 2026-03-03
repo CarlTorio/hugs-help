@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          admin_notes: string | null
+          contact_number: string
+          created_at: string
+          date_of_visit: string
+          email: string
+          full_name: string
+          id: string
+          number_of_pax: number
+          receipt_url: string | null
+          special_requests: string | null
+          status: string
+          table_type: string
+          time_of_arrival: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          contact_number: string
+          created_at?: string
+          date_of_visit: string
+          email: string
+          full_name: string
+          id?: string
+          number_of_pax: number
+          receipt_url?: string | null
+          special_requests?: string | null
+          status?: string
+          table_type: string
+          time_of_arrival: string
+        }
+        Update: {
+          admin_notes?: string | null
+          contact_number?: string
+          created_at?: string
+          date_of_visit?: string
+          email?: string
+          full_name?: string
+          id?: string
+          number_of_pax?: number
+          receipt_url?: string | null
+          special_requests?: string | null
+          status?: string
+          table_type?: string
+          time_of_arrival?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          date_label: string
+          description: string
+          id: string
+          image_url: string | null
+          slot: number
+          title: string
+        }
+        Insert: {
+          date_label?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          slot: number
+          title?: string
+        }
+        Update: {
+          date_label?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          slot?: number
+          title?: string
+        }
+        Relationships: []
+      }
       settings: {
         Row: {
           key: string
