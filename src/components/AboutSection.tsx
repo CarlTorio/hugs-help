@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, Play } from "lucide-react";
 
 const stats = [
-{ number: "7+", label: "YEARS SERVING QC" },
+{ number: "2", label: "YEARS SERVING QC" },
 { number: "50+", label: "SIGNATURE COCKTAILS" },
-{ number: "500+", label: "EVENTS HOSTED" }];
+{ number: "50+", label: "EVENTS HOSTED" }];
 
 
 const childFade = {
@@ -170,7 +170,7 @@ const AboutSection = () => {
           onEnded={handleEnded}
           className="absolute inset-0 w-full h-full object-contain"
           style={{ background: "#000" }}
-          src="https://i.imgur.com/7zTw3OG.mp4" />
+          src="https://i.imgur.com/PdLXc61.mp4" />
 
 
         {/* Controls overlay */}
