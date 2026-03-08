@@ -18,6 +18,7 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(!!localStorage.getItem(REMEMBER_KEY));
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact" | "settings">("events");
 
   const handleLogin = (e: React.FormEvent) => {
