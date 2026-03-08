@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import AdminEventEditor from "@/components/admin/AdminEventEditor";
 import AdminReservations from "@/components/admin/AdminReservations";
 import AdminZonePhotos from "@/components/admin/AdminZonePhotos";
