@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import AdminEventEditor from "@/components/admin/AdminEventEditor";
 import AdminReservations from "@/components/admin/AdminReservations";
 import AdminZonePhotos from "@/components/admin/AdminZonePhotos";
@@ -18,6 +18,7 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(!!localStorage.getItem(REMEMBER_KEY));
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<"events" | "reservations" | "zone" | "contact" | "settings">("events");
 
   const handleLogin = (e: React.FormEvent) => {
@@ -41,20 +42,33 @@ const Admin = () => {
         <form onSubmit={handleLogin} className="w-full max-w-[360px] flex flex-col items-center gap-6">
           <img src="https://i.imgur.com/HKLn00w.png" alt="Logo" className="w-32 object-contain" />
           <p className="font-body font-semibold text-[9px] tracking-[4px] uppercase" style={{ color: "#CC0000" }}>ADMIN ACCESS</p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => { setPassword(e.target.value); setError(false); }}
-            placeholder="Enter password"
-            className="w-full font-body text-[13px] outline-none"
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              border: error ? "1px solid #CC0000" : "1px solid rgba(139,0,0,0.3)",
-              color: "#FFFFFF",
-              padding: "14px 18px",
-            }}
-            autoFocus
-          />
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              placeholder="Enter password"
+              className="w-full font-body text-[13px] outline-none pr-12"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: error ? "1px solid #CC0000" : "1px solid rgba(139,0,0,0.3)",
+                color: "#FFFFFF",
+                padding: "14px 18px",
+              }}
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: "rgba(240,235,227,0.4)", background: "none", border: "none", cursor: "pointer" }}
+              onMouseEnter={(e) => e.currentTarget.style.color = "rgba(240,235,227,0.7)"}
+              onMouseLeave={(e) => e.currentTarget.style.color = "rgba(240,235,227,0.4)"}
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           {error && <p className="font-body text-[11px]" style={{ color: "#CC0000" }}>Incorrect password</p>}
           <label className="flex items-center gap-2 cursor-pointer self-start">
             <input
